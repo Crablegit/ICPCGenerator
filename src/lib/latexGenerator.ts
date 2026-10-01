@@ -43,7 +43,7 @@ export function generateLatex(notebook: NotebookData): string {
 
   const rawTitle = escapeLatexText(config.title || 'Team Notebook');
   const titleFormatted = config.schoolLogo
-    ? `\\raisebox{-0.2\\height}{\\includegraphics[height=1.1cm]{logo.png}}\\quad ${rawTitle}`
+    ? `\\includegraphics[height=1.5cm]{logo.png}\\\\[0.3cm] ${rawTitle}`
     : rawTitle;
 
   let out = `\\documentclass[${fontSize},a4paper,onesided]{article}

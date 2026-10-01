@@ -161,7 +161,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
               </div>
               <div className="text-[11px] text-slate-400 dark:text-zinc-500">
                 {config.schoolLogo
-                  ? 'Displays beside Team Notebook'
+                  ? 'Displays above Team Notebook'
                   : 'Click Upload or Paste (Ctrl+V) image here'}
               </div>
             </div>

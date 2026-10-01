@@ -103,14 +103,15 @@ export const TocPreview: React.FC<TocPreviewProps> = ({
             isHoveringLogoArea ? 'bg-indigo-50/70 border-2 border-dashed border-indigo-400' : ''
           }`}
         >
-          <div className="flex items-center justify-center space-x-3 mb-2 flex-wrap">
+          {/* Logo placed directly on top of Team Notebook */}
+          <div className="flex flex-col items-center justify-center mb-3">
             {config.schoolLogo ? (
-              <div className="relative group inline-flex items-center">
+              <div className="relative group inline-flex items-center mb-2.5">
                 <img
                   src={config.schoolLogo}
                   alt="School Logo"
                   onClick={() => logoInputRef.current?.click()}
-                  className="h-9 max-w-[60px] object-contain shrink-0 inline-block cursor-pointer hover:opacity-80 transition hover:scale-105"
+                  className="h-12 max-w-[120px] object-contain shrink-0 cursor-pointer hover:opacity-85 transition hover:scale-105"
                   title="Click to change logo"
                 />
                 <button
@@ -118,7 +119,7 @@ export const TocPreview: React.FC<TocPreviewProps> = ({
                     e.stopPropagation();
                     onUpdateLogo && onUpdateLogo(undefined);
                   }}
-                  className="absolute -top-1.5 -right-1.5 opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 text-white rounded-full p-0.5 shadow transition cursor-pointer"
+                  className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 text-white rounded-full p-0.5 shadow transition cursor-pointer"
                   title="Remove logo"
                 >
                   <X className="h-3 w-3" />
@@ -128,15 +129,15 @@ export const TocPreview: React.FC<TocPreviewProps> = ({
               <button
                 type="button"
                 onClick={() => logoInputRef.current?.click()}
-                className="inline-flex items-center space-x-1 rounded-xl border border-dashed border-slate-300 hover:border-indigo-500 dark:hover:border-pink-500 bg-slate-50 hover:bg-indigo-50/50 px-2.5 py-1 text-xs font-sans text-slate-500 hover:text-indigo-600 dark:hover:text-pink-600 transition cursor-pointer shadow-sm"
+                className="inline-flex items-center space-x-1 rounded-xl border border-dashed border-slate-300 hover:border-indigo-500 dark:hover:border-pink-500 bg-slate-50 hover:bg-indigo-50/50 px-3 py-1 text-xs font-sans text-slate-500 hover:text-indigo-600 dark:hover:text-pink-600 transition cursor-pointer shadow-sm mb-2"
                 title="Add University Logo (Click or Paste Ctrl+V)"
               >
                 <ImageIcon className="h-3.5 w-3.5" />
-                <span>+ Logo</span>
+                <span>+ Add School Logo</span>
               </button>
             )}
 
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 font-serif inline-block">
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900 font-serif">
               {config.title || 'Team Notebook'}
             </h1>
           </div>
