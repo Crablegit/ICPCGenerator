@@ -179,7 +179,7 @@ export default function HomePage() {
     if (confirm('Reset everything? This will clear all existing categories and files.')) {
       const resetNotebook: NotebookData = {
         config: {
-          title: 'ICPC Notebook',
+          title: 'icpc notebook',
           teamName: 'Sample Team Name',
           university: 'Sample University Name',
           date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
@@ -223,7 +223,7 @@ export default function HomePage() {
   // Download project ZIP directly
   const handleDownloadZip = async () => {
     await downloadProjectZip(notebook);
-    showToast('Downloaded project ZIP with main.tex and logo.png! 📦');
+    showToast('Downloaded project ZIP with icpc notebook.tex and logo.png! 📦');
   };
 
   return (

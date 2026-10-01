@@ -41,10 +41,7 @@ export function generateLatex(notebook: NotebookData): string {
     ? `${config.teamName} (${config.university})`
     : config.teamName;
 
-  const rawTitle = escapeLatexText(config.title || 'ICPC Notebook');
-  const titleFormatted = config.schoolLogo
-    ? `\\includegraphics[height=2.2cm,keepaspectratio]{logo.png}\\\\[0.4cm]\n${rawTitle}`
-    : rawTitle;
+  const rawTitle = escapeLatexText(config.title || 'icpc notebook');
 
   let out = `\\documentclass[${fontSize},a4paper,onesided]{article}
 
@@ -94,11 +91,17 @@ export function generateLatex(notebook: NotebookData): string {
 \\fancyhead[R]{\\thepage}
 \\fancyhead[L]{${escapeLatexText(config.initials || 'ICPC')}}
 
-\\begin{document}
-
-\\title{${titleFormatted}}
+\\title{${rawTitle}}
 \\author{${escapeLatexText(authorStr || 'Sample Team')}}
 \\date{${escapeLatexText(config.date || '\\today')}}
+
+\\begin{document}
+${config.schoolLogo ? `
+\\begin{center}
+  \\includegraphics[height=2.2cm,keepaspectratio]{logo.png}
+\\end{center}
+\\vspace{-0.6cm}
+` : ''}
 \\maketitle
 
 \\begin{multicols}{${cols}}

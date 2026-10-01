@@ -20,7 +20,9 @@ export async function openInOverleaf(notebookOrLatex: NotebookData | string) {
     logoBase64 = notebookOrLatex.config.schoolLogo;
   }
 
-  const projectName = 'icpc notebook';
+  const projectName = (typeof notebookOrLatex !== 'string' && notebookOrLatex.config?.title)
+    ? notebookOrLatex.config.title
+    : 'icpc notebook';
   const fileName = 'icpc notebook.tex';
 
   const form = document.createElement('form');

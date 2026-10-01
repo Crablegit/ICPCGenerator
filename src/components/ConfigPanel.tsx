@@ -80,7 +80,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
             value={config.title}
             onChange={(e) => handleChange('title', e.target.value)}
             className="w-full rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-black px-3 py-2 text-slate-900 dark:text-zinc-100 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] focus:outline-none transition-all"
-            placeholder="Team Notebook"
+            placeholder="icpc notebook"
           />
         </div>
 
@@ -161,7 +161,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
               </div>
               <div className="text-[11px] text-slate-400 dark:text-zinc-500">
                 {config.schoolLogo
-                  ? 'Displays above Team Notebook'
+                  ? 'Displays above Notebook Title'
                   : 'Click Upload or Paste (Ctrl+V) image here'}
               </div>
             </div>

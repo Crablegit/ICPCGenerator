@@ -138,7 +138,7 @@ export const TocPreview: React.FC<TocPreviewProps> = ({
             )}
 
             <h1 className="text-3xl font-bold tracking-tight text-slate-900 font-serif">
-              {config.title || 'Team Notebook'}
+              {config.title || 'icpc notebook'}
             </h1>
           </div>
 

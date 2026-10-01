@@ -52,7 +52,7 @@ export const PrintView: React.FC<PrintViewProps> = ({ notebook }) => {
           {/* Running Header */}
           <div className="flex justify-between items-center pb-2 mb-4 border-b border-slate-400 text-[10px] text-slate-600 font-mono">
             <span>{config.initials || 'ICPC'}</span>
-            <span className="font-semibold">{config.title || 'Team Notebook'}</span>
+            <span className="font-semibold">{config.title || 'icpc notebook'}</span>
           </div>
 
           <div
