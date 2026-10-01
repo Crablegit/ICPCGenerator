@@ -1,6 +1,4 @@
-# 🦀 Crab's ICPC Generator
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Crablegit/ICPCGenerator)
+# Crab's ICPC Generator
 
 A modern, fluid web application designed to auto-generate **ACM-ICPC Team Notebooks (Cheatsheets)** with the authentic 3-column LaTeX format based on [codes2pdf](https://github.com/Erfaniaa/codes2pdf). 
 
@@ -48,17 +46,6 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## 🌐 Deploy to Vercel
-
-1. Push this repository to your GitHub account (`Crablegit/ICPCGenerator`).
-2. Go to [vercel.com/new](https://vercel.com/new).
-3. Import `ICPCGenerator` and click **Deploy**.
-4. In ~30 seconds, your application will be live at `https://icpc-generator.vercel.app`!
-
-*(Optional) Supabase Database:* To enable cross-device cloud persistence and sharing links, set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in your Vercel Environment Variables. Otherwise, the app operates completely offline using browser LocalStorage.
 
 ---
 
