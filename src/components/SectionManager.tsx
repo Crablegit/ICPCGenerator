@@ -37,6 +37,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
   const folderInputRef = useRef<HTMLInputElement>(null);
   const zipInputRef = useRef<HTMLInputElement>(null);
   const singleFileInputRef = useRef<HTMLInputElement>(null);
+  const categoryListRef = useRef<HTMLDivElement>(null);
 
   const [activeSectionForUpload, setActiveSectionForUpload] = useState<string | null>(null);
   const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
@@ -49,18 +50,34 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
     setTimeout(() => setStatusMessage(null), 3000);
   };
 
-  // Add new section
+  // Add new section and auto-scroll to bottom
   const handleAddSection = () => {
     const nextNum = sections.length + 1;
+    const newId = `sec-${Date.now()}`;
+    const defaultTitle = `${nextNum} New Category`;
     const newSection: Section = {
-      id: `sec-${Date.now()}`,
-      title: `${nextNum} New Section`,
+      id: newId,
+      title: defaultTitle,
       snippets: []
     };
     onUpdateSections([...sections, newSection]);
+
+    // Immediately trigger edit mode for the newly added category
+    setEditingSectionId(newId);
+    setEditingTitle(defaultTitle);
+
+    // Auto-scroll the categories container to the very bottom
+    setTimeout(() => {
+      if (categoryListRef.current) {
+        categoryListRef.current.scrollTo({
+          top: categoryListRef.current.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
   };
 
-  // Move Section Up/Down with array swap
+  // Move Section Up/Down
   const handleMoveSection = (idx: number, direction: 'up' | 'down') => {
     if (direction === 'up' && idx === 0) return;
     if (direction === 'down' && idx === sections.length - 1) return;
@@ -74,7 +91,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
 
   // Delete Section
   const handleDeleteSection = (secId: string) => {
-    if (confirm('Delete this section and all its files?')) {
+    if (confirm('Delete this category and all its code files?')) {
       onUpdateSections(sections.filter(s => s.id !== secId));
     }
   };
@@ -85,7 +102,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
       onUpdateSections(
         sections.map(s => s.id === secId ? { ...s, snippets: [] } : s)
       );
-      showStatus(`Cleared all files in ${title}`);
+      showStatus(`Cleared files in "${title}"`);
     }
   };
 
@@ -200,7 +217,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
       const parsedSections = await parseFolderFiles(e.target.files);
       if (parsedSections.length > 0) {
         onUpdateSections(parsedSections);
-        showStatus(`Imported ${parsedSections.length} categories from folder!`);
+        showStatus(`Imported ${parsedSections.length} categories!`);
         if (parsedSections[0].snippets.length > 0) {
           onSelectSnippet(parsedSections[0].snippets[0].id);
         }
@@ -220,14 +237,14 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
       const parsedSections = await parseZipArchive(file);
       if (parsedSections.length > 0) {
         onUpdateSections(parsedSections);
-        showStatus(`Extracted ${parsedSections.length} categories from ZIP!`);
+        showStatus(`Extracted ${parsedSections.length} categories!`);
         if (parsedSections[0].snippets.length > 0) {
           onSelectSnippet(parsedSections[0].snippets[0].id);
         }
       }
     } catch (err) {
       console.error(err);
-      alert('Error parsing ZIP archive.');
+      alert('Error parsing ZIP.');
     }
     e.target.value = '';
   };
@@ -243,7 +260,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
         const parsed = await parseZipArchive(firstFile);
         if (parsed.length > 0) {
           onUpdateSections(parsed);
-          showStatus(`Imported ${parsed.length} categories from dropped ZIP!`);
+          showStatus(`Imported ${parsed.length} categories from ZIP!`);
         }
         return;
       }
@@ -295,14 +312,14 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
         className={`rounded-3xl border-2 border-dashed p-4 text-center transition-all ${
           isDragging 
             ? 'border-blue-500 bg-blue-500/10' 
-            : 'border-white/10 bg-slate-900/50 hover:border-white/20'
+            : 'border-slate-200 dark:border-white/10 bg-slate-50/70 dark:bg-slate-900/50 hover:border-slate-300 dark:hover:border-white/20'
         }`}
       >
-        <div className="flex items-center justify-center space-x-2 text-slate-200 mb-1.5">
-          <Folder className="h-5 w-5 text-blue-400" />
+        <div className="flex items-center justify-center space-x-2 text-slate-800 dark:text-slate-200 mb-1">
+          <Folder className="h-5 w-5 text-blue-500 dark:text-blue-400" />
           <span className="text-xs font-bold uppercase tracking-wider">Bulk Upload Root Folder</span>
         </div>
-        <p className="text-[11px] text-slate-400 mb-3 px-2">
+        <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-3 px-2">
           Each subfolder becomes a category with its code files (.cpp, .py, .java, .tex).
         </p>
 
@@ -319,9 +336,9 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => zipInputRef.current?.click()}
-            className="flex items-center space-x-1.5 rounded-full bg-white/5 border border-white/10 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-white/10 transition cursor-pointer"
+            className="flex items-center space-x-1.5 rounded-full bg-slate-200/80 dark:bg-white/5 border border-slate-300/80 dark:border-white/10 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-white/10 transition cursor-pointer"
           >
-            <FolderArchive className="h-3.5 w-3.5 text-purple-400" />
+            <FolderArchive className="h-3.5 w-3.5 text-purple-500 dark:text-purple-400" />
             <span>Select .ZIP</span>
           </motion.button>
         </div>
@@ -334,7 +351,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="rounded-2xl bg-emerald-500/15 border border-emerald-500/30 px-3.5 py-2 text-xs text-emerald-300 flex items-center space-x-2 shadow-sm"
+            className="rounded-2xl bg-emerald-500/15 border border-emerald-500/30 px-3.5 py-2 text-xs text-emerald-700 dark:text-emerald-300 flex items-center space-x-2 shadow-sm"
           >
             <Check className="h-4 w-4" />
             <span>{statusMessage}</span>
@@ -345,8 +362,8 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
       {/* Sections Tree List Header */}
       <div className="flex items-center justify-between pt-1">
         <div className="flex items-center space-x-2">
-          <Layers className="h-4 w-4 text-indigo-400" />
-          <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+          <Layers className="h-4 w-4 text-indigo-500 dark:text-indigo-400" />
+          <h3 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
             Categories ({sections.length})
           </h3>
         </div>
@@ -354,24 +371,27 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={handleAddSection}
-          className="flex items-center space-x-1 rounded-full bg-indigo-600/30 border border-indigo-500/40 px-3 py-1 text-xs font-medium text-indigo-300 hover:bg-indigo-600/50 transition cursor-pointer"
+          className="flex items-center space-x-1 rounded-full bg-indigo-50 dark:bg-indigo-600/30 border border-indigo-200 dark:border-indigo-500/40 px-3 py-1 text-xs font-medium text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-600/50 transition cursor-pointer shadow-sm"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Category</span>
         </motion.button>
       </div>
 
-      {/* Section List */}
-      <div className="space-y-3 overflow-y-auto max-h-[calc(100vh-27rem)] pr-1">
+      {/* Category List with Auto-Scroll Ref */}
+      <div
+        ref={categoryListRef}
+        className="space-y-3 overflow-y-auto max-h-[calc(100vh-25rem)] pr-1 scroll-smooth"
+      >
         {sections.map((section, secIdx) => (
           <div
             key={section.id}
-            className="rounded-2xl border border-white/10 bg-slate-900/60 overflow-hidden shadow-sm transition-all"
+            className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 overflow-hidden shadow-sm transition-all"
           >
             {/* Section Header */}
-            <div className="flex items-center justify-between bg-slate-950/40 px-3 py-2 border-b border-white/5">
+            <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-950/40 px-3 py-2 border-b border-slate-100 dark:border-white/5">
               <div className="flex items-center space-x-2 flex-1 min-w-0">
-                <Folder className="h-4 w-4 text-amber-400 shrink-0" />
+                <Folder className="h-4 w-4 text-amber-500 dark:text-amber-400 shrink-0" />
                 {editingSectionId === section.id ? (
                   <div className="flex items-center space-x-1 flex-1">
                     <input
@@ -380,11 +400,11 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                       onChange={(e) => setEditingTitle(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSaveRename(section.id)}
                       autoFocus
-                      className="w-full rounded-lg bg-slate-950 px-2 py-0.5 text-xs text-white border border-blue-500 focus:outline-none"
+                      className="w-full rounded-lg bg-white dark:bg-slate-950 px-2 py-0.5 text-xs text-slate-900 dark:text-white border border-blue-500 focus:outline-none"
                     />
                     <button
                       onClick={() => handleSaveRename(section.id)}
-                      className="p-1 text-emerald-400 hover:text-emerald-300"
+                      className="p-1 text-emerald-600 dark:text-emerald-400 hover:opacity-80"
                     >
                       <Check className="h-3 w-3" />
                     </button>
@@ -392,13 +412,13 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                 ) : (
                   <span
                     onClick={() => handleStartRename(section)}
-                    className="text-xs font-semibold text-slate-200 truncate cursor-pointer hover:text-blue-400 transition"
+                    className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition"
                     title="Click to rename category"
                   >
                     {section.title}
                   </span>
                 )}
-                <span className="text-[10px] text-slate-500 font-mono">
+                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
                   ({section.snippets.length})
                 </span>
               </div>
@@ -408,7 +428,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                 {/* Clear all files in this section */}
                 <button
                   onClick={() => handleClearSectionFiles(section.id, section.title)}
-                  className="p-1 text-slate-400 hover:text-amber-400 transition"
+                  className="p-1 text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 transition"
                   title="Clear all code files in this category"
                 >
                   <Eraser className="h-3.5 w-3.5" />
@@ -416,7 +436,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                 <button
                   onClick={() => handleMoveSection(secIdx, 'up')}
                   disabled={secIdx === 0}
-                  className="p-1 text-slate-400 hover:text-slate-200 disabled:opacity-30"
+                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 disabled:opacity-20"
                   title="Move category up"
                 >
                   <ChevronUp className="h-3.5 w-3.5" />
@@ -424,21 +444,21 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                 <button
                   onClick={() => handleMoveSection(secIdx, 'down')}
                   disabled={secIdx === sections.length - 1}
-                  className="p-1 text-slate-400 hover:text-slate-200 disabled:opacity-30"
+                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 disabled:opacity-20"
                   title="Move category down"
                 >
                   <ChevronDown className="h-3.5 w-3.5" />
                 </button>
                 <button
                   onClick={() => handleStartRename(section)}
-                  className="p-1 text-slate-400 hover:text-slate-200"
+                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
                   title="Rename"
                 >
                   <Edit2 className="h-3 w-3" />
                 </button>
                 <button
                   onClick={() => handleDeleteSection(section.id)}
-                  className="p-1 text-red-400/80 hover:text-red-300"
+                  className="p-1 text-red-400 hover:text-red-500"
                   title="Delete category"
                 >
                   <Trash2 className="h-3 w-3" />
@@ -449,8 +469,8 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
             {/* Snippets list */}
             <div className="p-2 space-y-1">
               {section.snippets.length === 0 ? (
-                <div className="text-center py-2 text-[11px] text-slate-500 italic">
-                  Empty category. Upload files below.
+                <div className="text-center py-2 text-[11px] text-slate-400 italic">
+                  Empty category. Upload code below.
                 </div>
               ) : (
                 section.snippets.map((snip, snipIdx) => {
@@ -462,18 +482,18 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                       onClick={() => onSelectSnippet(snip.id)}
                       className={`group flex items-center justify-between rounded-xl px-2.5 py-1.5 text-xs transition cursor-pointer ${
                         isSelected
-                          ? 'bg-blue-600/25 text-blue-200 border border-blue-500/40 shadow-sm'
-                          : 'text-slate-300 hover:bg-white/5 border border-transparent'
+                          ? 'bg-blue-50 dark:bg-blue-600/25 text-blue-700 dark:text-blue-200 border border-blue-200 dark:border-blue-500/40 shadow-sm'
+                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 border border-transparent'
                       }`}
                     >
                       <div className="flex items-center space-x-2 truncate">
                         {snip.isTex || snip.language === 'tex' ? (
-                          <FileText className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                          <FileText className="h-3.5 w-3.5 text-amber-500 dark:text-amber-400 shrink-0" />
                         ) : (
-                          <FileCode className="h-3.5 w-3.5 text-sky-400 shrink-0" />
+                          <FileCode className="h-3.5 w-3.5 text-sky-500 dark:text-sky-400 shrink-0" />
                         )}
                         <span className="truncate">{snip.title}</span>
-                        <span className="rounded-md bg-white/5 px-1.5 py-0.5 text-[9px] font-mono text-slate-400 uppercase">
+                        <span className="rounded-md bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 text-[9px] font-mono text-slate-500 dark:text-slate-400 uppercase">
                           {snip.isTex ? 'TEX' : snip.language}
                         </span>
                       </div>
@@ -486,7 +506,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                             handleMoveSnippet(section.id, snipIdx, 'up');
                           }}
                           disabled={snipIdx === 0}
-                          className="p-0.5 text-slate-400 hover:text-slate-200 disabled:opacity-20"
+                          className="p-0.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 disabled:opacity-20"
                           title="Move up"
                         >
                           <ChevronUp className="h-3 w-3" />
@@ -497,7 +517,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                             handleMoveSnippet(section.id, snipIdx, 'down');
                           }}
                           disabled={snipIdx === section.snippets.length - 1}
-                          className="p-0.5 text-slate-400 hover:text-slate-200 disabled:opacity-20"
+                          className="p-0.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 disabled:opacity-20"
                           title="Move down"
                         >
                           <ChevronDown className="h-3 w-3" />
@@ -507,7 +527,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                             e.stopPropagation();
                             handleDeleteSnippet(section.id, snip.id);
                           }}
-                          className="p-0.5 text-red-400 hover:text-red-300"
+                          className="p-0.5 text-red-400 hover:text-red-500"
                           title="Delete file"
                         >
                           <Trash2 className="h-3 w-3" />
@@ -519,21 +539,21 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
               )}
 
               {/* Upload to category bar */}
-              <div className="flex items-center gap-1.5 pt-1.5 border-t border-white/5 mt-1">
+              <div className="flex items-center gap-1.5 pt-1.5 border-t border-slate-100 dark:border-white/5 mt-1">
                 <button
                   onClick={() => handleTriggerSectionFileUpload(section.id)}
-                  className="flex-1 flex items-center justify-center space-x-1 rounded-xl bg-white/5 px-2 py-1 text-[11px] font-medium text-slate-300 hover:bg-white/10 transition cursor-pointer"
+                  className="flex-1 flex items-center justify-center space-x-1 rounded-xl bg-slate-100 dark:bg-white/5 px-2 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10 transition cursor-pointer"
                 >
-                  <Upload className="h-3 w-3 text-sky-400" />
+                  <Upload className="h-3 w-3 text-sky-500 dark:text-sky-400" />
                   <span>Upload Files</span>
                 </button>
 
                 <button
                   onClick={() => handleAddSnippet(section.id)}
-                  className="flex items-center justify-center space-x-1 rounded-xl bg-white/5 px-2 py-1 text-[11px] font-medium text-slate-300 hover:bg-white/10 transition cursor-pointer"
+                  className="flex items-center justify-center space-x-1 rounded-xl bg-slate-100 dark:bg-white/5 px-2 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10 transition cursor-pointer"
                   title="Add empty code snippet"
                 >
-                  <Plus className="h-3 w-3 text-indigo-400" />
+                  <Plus className="h-3 w-3 text-indigo-500 dark:text-indigo-400" />
                   <span>New</span>
                 </button>
               </div>

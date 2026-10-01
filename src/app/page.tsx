@@ -9,29 +9,51 @@ import { Navbar } from '@/components/Navbar';
 import { ConfigPanel } from '@/components/ConfigPanel';
 import { SectionManager } from '@/components/SectionManager';
 import { TocPreview } from '@/components/TocPreview';
-import { CodeEditor } from '@/components/CodeEditor';
-import { LatexViewer } from '@/components/LatexViewer';
+import { SnippetDrawer } from '@/components/SnippetDrawer';
 import { StarModal } from '@/components/StarModal';
 import { Footer } from '@/components/Footer';
 import { 
-  ListTree, 
-  FileCode, 
-  FileText, 
   Settings2, 
   ChevronDown,
   ChevronUp,
-  Sparkles
+  Sparkles,
+  RotateCcw,
+  BookOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function HomePage() {
   const [notebook, setNotebook] = useState<NotebookData>(initialNotebookData);
-  const [selectedSnippetId, setSelectedSnippetId] = useState<string | null>('snip-1-1');
-  const [activeTab, setActiveTab] = useState<'toc' | 'editor' | 'latex'>('toc');
+  const [selectedSnippet, setSelectedSnippet] = useState<Snippet | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
   const [starModalOpen, setStarModalOpen] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
-  // Load from local storage on initial load
+  // Handle theme initialization
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const savedTheme = (localStorage.getItem('crabs_icpc_theme') as 'dark' | 'light') || 'dark';
+    setTheme(savedTheme);
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    localStorage.setItem('crabs_icpc_theme', nextTheme);
+    if (nextTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
+  // Load notebook from local storage on initial load
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const saved = localStorage.getItem('crabs_icpc_notebook');
@@ -39,38 +61,32 @@ export default function HomePage() {
       try {
         const parsed = JSON.parse(saved);
         setNotebook(parsed);
-        if (parsed.sections?.[0]?.snippets?.[0]) {
-          setSelectedSnippetId(parsed.sections[0].snippets[0].id);
-        }
       } catch (e) {
         console.error(e);
       }
     }
   }, []);
 
-  // Save to local storage on change
+  // Save notebook to local storage on change
   useEffect(() => {
     localStorage.setItem('crabs_icpc_notebook', JSON.stringify(notebook));
   }, [notebook]);
 
-  // Find currently selected snippet
-  let currentSnippet: Snippet | null = null;
-  for (const sec of notebook.sections) {
-    const found = sec.snippets.find((s) => s.id === selectedSnippetId);
-    if (found) {
-      currentSnippet = found;
-      break;
-    }
-  }
-
-  // Handle snippet selection
+  // Handle snippet selection (opens edit drawer)
   const handleSelectSnippet = (id: string) => {
-    setSelectedSnippetId(id);
-    setActiveTab('editor');
+    for (const sec of notebook.sections) {
+      const found = sec.snippets.find((s) => s.id === id);
+      if (found) {
+        setSelectedSnippet(found);
+        setIsDrawerOpen(true);
+        break;
+      }
+    }
   };
 
   // Update snippet
   const handleUpdateSnippet = (updated: Snippet) => {
+    setSelectedSnippet(updated);
     setNotebook((prev) => ({
       ...prev,
       sections: prev.sections.map((sec) => ({
@@ -89,8 +105,8 @@ export default function HomePage() {
       const resetNotebook: NotebookData = {
         config: {
           title: 'Team Notebook',
-          teamName: 'My Team Name',
-          university: 'My University',
+          teamName: 'Sample Team Name',
+          university: 'Sample University Name',
           date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
           initials: 'CRAB',
           columns: 3,
@@ -111,7 +127,8 @@ export default function HomePage() {
         updatedAt: new Date().toISOString()
       };
       setNotebook(resetNotebook);
-      setSelectedSnippetId(null);
+      setSelectedSnippet(null);
+      setIsDrawerOpen(false);
       localStorage.removeItem('crabs_icpc_notebook');
     }
   };
@@ -129,11 +146,11 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-950 text-slate-100">
-      {/* Top Navbar */}
+    <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100 transition-colors">
+      {/* Top Navbar: Brand + Theme Toggle ONLY */}
       <Navbar
-        onGenerate={handleGenerate}
-        onClearAll={handleClearAll}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       {/* Main Container */}
@@ -143,10 +160,10 @@ export default function HomePage() {
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={() => setShowConfig(!showConfig)}
-            className="flex items-center space-x-2 text-xs font-semibold text-slate-300 hover:text-white bg-slate-900/80 border border-white/10 rounded-2xl px-4 py-2 backdrop-blur-md transition cursor-pointer shadow-sm"
+            className="flex items-center space-x-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 rounded-2xl px-4 py-2 backdrop-blur-md transition cursor-pointer shadow-sm"
           >
-            <Settings2 className="h-3.5 w-3.5 text-blue-400" />
-            <span>Customize Team & Logo ({notebook.config.teamName || 'Team Notebook'})</span>
+            <Settings2 className="h-3.5 w-3.5 text-blue-500 dark:text-blue-400" />
+            <span>Customize Team & School Logo ({notebook.config.teamName || 'Team Notebook'})</span>
             {showConfig ? <ChevronUp className="h-3.5 w-3.5 ml-1" /> : <ChevronDown className="h-3.5 w-3.5 ml-1" />}
           </motion.button>
 
@@ -171,10 +188,10 @@ export default function HomePage() {
         {/* 2-Column Responsive Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Categories & Bulk Upload (4 cols) */}
-          <div className="lg:col-span-4 bg-slate-900/40 rounded-3xl border border-white/10 p-5 backdrop-blur-xl shadow-xl">
+          <div className="lg:col-span-4 bg-white/70 dark:bg-slate-900/40 rounded-3xl border border-slate-200 dark:border-white/10 p-5 backdrop-blur-xl shadow-lg transition-colors">
             <SectionManager
               sections={notebook.sections}
-              selectedSnippetId={selectedSnippetId}
+              selectedSnippetId={selectedSnippet?.id || null}
               onSelectSnippet={handleSelectSnippet}
               onUpdateSections={(newSecs) =>
                 setNotebook({ ...notebook, sections: newSecs })
@@ -182,88 +199,65 @@ export default function HomePage() {
             />
           </div>
 
-          {/* Right Column: Tab View & Previews (8 cols) */}
+          {/* Right Column: Fixed Table of Contents & Action Toolbar (8 cols) */}
           <div className="lg:col-span-8 flex flex-col space-y-4">
-            {/* View Switcher Tabs (Apple fluid pill) */}
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <div className="flex items-center space-x-1.5 bg-slate-900/80 p-1.5 rounded-2xl border border-white/10 backdrop-blur-md">
-                <button
-                  onClick={() => setActiveTab('toc')}
-                  className={`flex items-center space-x-1.5 rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer ${
-                    activeTab === 'toc'
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                      : 'text-slate-400 hover:text-slate-200'
-                  }`}
-                >
-                  <ListTree className="h-3.5 w-3.5" />
-                  <span>Table of Contents</span>
-                </button>
-
-                <button
-                  onClick={() => setActiveTab('editor')}
-                  className={`flex items-center space-x-1.5 rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer ${
-                    activeTab === 'editor'
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                      : 'text-slate-400 hover:text-slate-200'
-                  }`}
-                >
-                  <FileCode className="h-3.5 w-3.5" />
-                  <span>Code Editor</span>
-                </button>
-
-                <button
-                  onClick={() => setActiveTab('latex')}
-                  className={`flex items-center space-x-1.5 rounded-xl px-4 py-2 text-xs font-semibold transition cursor-pointer ${
-                    activeTab === 'latex'
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25'
-                      : 'text-slate-400 hover:text-slate-200'
-                  }`}
-                >
-                  <FileText className="h-3.5 w-3.5" />
-                  <span>LaTeX Source</span>
-                </button>
+            {/* Action Bar with Reset All and Generate Notebook Buttons */}
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 pb-3">
+              <div className="flex items-center space-x-2">
+                <BookOpen className="h-4 w-4 text-blue-500 dark:text-blue-400" />
+                <span className="text-sm font-bold text-slate-800 dark:text-slate-200 tracking-tight">
+                  Table of Contents
+                </span>
+                <span className="hidden sm:inline text-xs text-slate-400 dark:text-slate-500 font-normal">
+                  • Click algorithm to edit
+                </span>
               </div>
 
-              {/* Overleaf Quick Trigger Hint */}
-              <div className="hidden sm:flex items-center text-xs text-slate-400 space-x-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
-                <span>Ready for Overleaf</span>
+              {/* Action Buttons: Reset All + Generate Notebook */}
+              <div className="flex items-center space-x-2.5">
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.96 }}
+                  transition={{ type: 'spring', stiffness: 450, damping: 25 }}
+                  onClick={handleClearAll}
+                  className="flex items-center space-x-1.5 rounded-full border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 hover:bg-red-50 dark:hover:bg-red-500/10 hover:border-red-300 dark:hover:border-red-500/30 text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400 px-3.5 py-1.5 text-xs font-semibold transition cursor-pointer shadow-sm"
+                  title="Reset everything and start fresh"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  <span>Reset All</span>
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.04, y: -1 }}
+                  whileTap={{ scale: 0.96, y: 1 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+                  onClick={handleGenerate}
+                  className="flex items-center space-x-2 rounded-full bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 px-5 py-2 text-xs sm:text-sm font-bold text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/35 transition cursor-pointer"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  <span>Generate Notebook</span>
+                </motion.button>
               </div>
             </div>
 
-            {/* Tab Panes */}
-            <div>
-              {activeTab === 'toc' && (
-                <div className="animate-fadeIn">
-                  <div className="mb-2 text-xs text-slate-400 flex items-center justify-between">
-                    <span>Preview Form: Page 1 Table of Contents</span>
-                    <span className="text-[11px] text-slate-500">Click any algorithm to edit code</span>
-                  </div>
-                  <TocPreview
-                    notebook={notebook}
-                    onSelectSnippet={handleSelectSnippet}
-                  />
-                </div>
-              )}
-
-              {activeTab === 'editor' && (
-                <div className="animate-fadeIn">
-                  <CodeEditor
-                    snippet={currentSnippet}
-                    onUpdateSnippet={handleUpdateSnippet}
-                  />
-                </div>
-              )}
-
-              {activeTab === 'latex' && (
-                <div className="animate-fadeIn">
-                  <LatexViewer notebook={notebook} />
-                </div>
-              )}
+            {/* Permanent Table of Contents Preview */}
+            <div className="animate-fadeIn">
+              <TocPreview
+                notebook={notebook}
+                onSelectSnippet={handleSelectSnippet}
+              />
             </div>
           </div>
         </div>
       </main>
+
+      {/* Snippet Edit Drawer Modal */}
+      <SnippetDrawer
+        snippet={selectedSnippet}
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onUpdateSnippet={handleUpdateSnippet}
+      />
 
       {/* Give me a star Modal */}
       <StarModal
@@ -272,7 +266,7 @@ export default function HomePage() {
         onConfirmOverleaf={handleConfirmOverleaf}
       />
 
-      {/* Footer with Crabrian and template credits */}
+      {/* Footer */}
       <Footer />
     </div>
   );
