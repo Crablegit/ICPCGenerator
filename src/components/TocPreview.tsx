@@ -146,7 +146,7 @@ export const TocPreview: React.FC<TocPreviewProps> = ({
             {config.teamName} {config.university ? `(${config.university})` : ''}
           </div>
           <div className="text-xs text-slate-600 font-serif mt-1">
-            {config.date || 'December 14, 2018'}
+            {config.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
           </div>
         </div>
 

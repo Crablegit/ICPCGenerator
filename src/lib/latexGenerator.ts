@@ -42,6 +42,9 @@ export function generateLatex(notebook: NotebookData): string {
     : config.teamName;
 
   const rawTitle = escapeLatexText(config.title || 'icpc notebook');
+  const dateStr = config.date && config.date.trim()
+    ? escapeLatexText(config.date.trim())
+    : '\\today';
 
   let out = `\\documentclass[${fontSize},a4paper,onesided]{article}
 
@@ -90,10 +93,9 @@ export function generateLatex(notebook: NotebookData): string {
 \\renewcommand{\\headrulewidth}{0pt}
 \\fancyhead[R]{\\thepage}
 \\fancyhead[L]{${escapeLatexText(config.initials || 'ICPC')}}
-
 \\title{${rawTitle}}
 \\author{${escapeLatexText(authorStr || 'Sample Team')}}
-\\date{${escapeLatexText(config.date || '\\today')}}
+\\date{${dateStr}}
 
 \\begin{document}
 ${config.schoolLogo ? `

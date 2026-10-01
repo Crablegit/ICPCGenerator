@@ -5,7 +5,7 @@ export const initialNotebookData: NotebookData = {
     title: 'icpc notebook',
     teamName: 'Sample Team Name',
     university: 'Sample University Name',
-    date: 'December 14, 2018',
+    date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
     initials: 'ST',
     columns: 3,
     orientation: 'landscape',
