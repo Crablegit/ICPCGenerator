@@ -5,6 +5,7 @@ import { NotebookData, Snippet } from '@/types/notebook';
 import { initialNotebookData } from '@/lib/initialData';
 import { generateLatex } from '@/lib/latexGenerator';
 import { openInOverleaf } from '@/lib/overleaf';
+import { processImageFile } from '@/lib/imageHelper';
 import { Navbar } from '@/components/Navbar';
 import { ConfigPanel } from '@/components/ConfigPanel';
 import { SectionManager } from '@/components/SectionManager';
@@ -18,7 +19,8 @@ import {
   ChevronUp, 
   Sparkles, 
   RotateCcw, 
-  BookOpen 
+  BookOpen,
+  Check
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -29,6 +31,12 @@ export default function HomePage() {
   const [showConfig, setShowConfig] = useState(false);
   const [starModalOpen, setStarModalOpen] = useState(false);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   // Handle theme initialization
   useEffect(() => {
@@ -67,10 +75,62 @@ export default function HomePage() {
     }
   }, []);
 
-  // Save notebook to local storage on change
+  // Save notebook to local storage safely with try/catch
   useEffect(() => {
-    localStorage.setItem('crabs_icpc_notebook', JSON.stringify(notebook));
+    try {
+      localStorage.setItem('crabs_icpc_notebook', JSON.stringify(notebook));
+    } catch (e) {
+      console.warn('LocalStorage save failed, trying slim fallback', e);
+      try {
+        const slim = {
+          ...notebook,
+          config: { ...notebook.config, schoolLogo: undefined }
+        };
+        localStorage.setItem('crabs_icpc_notebook', JSON.stringify(slim));
+      } catch (err) {
+        console.error('LocalStorage error', err);
+      }
+    }
   }, [notebook]);
+
+  // Global Ctrl + V paste listener for school logo image
+  useEffect(() => {
+    const handleGlobalPaste = async (e: ClipboardEvent) => {
+      // Don't intercept paste if user is typing in an input or textarea
+      const activeEl = document.activeElement;
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+        return;
+      }
+
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.startsWith('image/')) {
+          const file = items[i].getAsFile();
+          if (file) {
+            e.preventDefault();
+            try {
+              const dataUrl = await processImageFile(file);
+              setNotebook((prev) => ({
+                ...prev,
+                config: {
+                  ...prev.config,
+                  schoolLogo: dataUrl
+                }
+              }));
+              showToast('University logo added from clipboard! 🖼️');
+            } catch (err) {
+              console.error('Failed processing pasted image:', err);
+            }
+          }
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('paste', handleGlobalPaste);
+    return () => window.removeEventListener('paste', handleGlobalPaste);
+  }, []);
 
   // Handle snippet selection (opens edit drawer)
   const handleSelectSnippet = (id: string) => {
@@ -97,6 +157,22 @@ export default function HomePage() {
       })),
       updatedAt: new Date().toISOString(),
     }));
+  };
+
+  // Update logo directly from TOC preview or ConfigPanel
+  const handleUpdateLogo = (logoDataUrl?: string) => {
+    setNotebook((prev) => ({
+      ...prev,
+      config: {
+        ...prev.config,
+        schoolLogo: logoDataUrl
+      }
+    }));
+    if (logoDataUrl) {
+      showToast('University logo updated! 🖼️');
+    } else {
+      showToast('University logo removed');
+    }
   };
 
   // Reset / Clear all
@@ -130,6 +206,7 @@ export default function HomePage() {
       setSelectedSnippet(null);
       setIsDrawerOpen(false);
       localStorage.removeItem('crabs_icpc_notebook');
+      showToast('Notebook reset to default');
     }
   };
 
@@ -147,6 +224,21 @@ export default function HomePage() {
 
   return (
     <div className="relative flex flex-col min-h-screen bg-white dark:bg-black text-slate-900 dark:text-zinc-100 transition-colors duration-300">
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-2 rounded-full border border-indigo-400 dark:border-pink-500 bg-white/95 dark:bg-black/95 px-4 py-2 text-xs font-semibold text-slate-900 dark:text-white shadow-[0_0_20px_rgba(99,102,241,0.4)] dark:shadow-[0_0_25px_rgba(244,63,94,0.5)] backdrop-blur-xl"
+          >
+            <Check className="h-4 w-4 text-emerald-500 dark:text-pink-400" />
+            <span>{toastMessage}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Ambient background glow */}
       <div className="fixed inset-0 pointer-events-none bg-mesh-dark hidden dark:block opacity-70 z-0" />
       <div className="fixed inset-0 pointer-events-none bg-mesh-light block dark:hidden opacity-50 z-0" />
@@ -251,6 +343,7 @@ export default function HomePage() {
               <TocPreview
                 notebook={notebook}
                 onSelectSnippet={handleSelectSnippet}
+                onUpdateLogo={handleUpdateLogo}
               />
             </div>
           </div>

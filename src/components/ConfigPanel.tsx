@@ -3,6 +3,7 @@
 import React, { useRef } from 'react';
 import { NotebookConfig } from '@/types/notebook';
 import { Settings, Image as ImageIcon, Upload, Trash2, Columns, Type } from 'lucide-react';
+import { processImageFile } from '@/lib/imageHelper';
 
 interface ConfigPanelProps {
   config: NotebookConfig;
@@ -19,30 +20,33 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
     });
   };
 
-  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      handleChange('schoolLogo', reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    try {
+      const compressedDataUrl = await processImageFile(file);
+      handleChange('schoolLogo', compressedDataUrl);
+    } catch (err) {
+      console.error('Failed to process logo image:', err);
+      alert('Could not process image file. Please try another image.');
+    }
     e.target.value = '';
   };
 
-  // Support paste from clipboard
-  const handlePaste = (e: React.ClipboardEvent) => {
+  // Support paste from clipboard inside config panel
+  const handlePaste = async (e: React.ClipboardEvent) => {
     const items = e.clipboardData?.items;
     if (!items) return;
     for (let i = 0; i < items.length; i++) {
       if (items[i].type.indexOf('image') !== -1) {
         const file = items[i].getAsFile();
         if (file) {
-          const reader = new FileReader();
-          reader.onload = () => {
-            handleChange('schoolLogo', reader.result as string);
-          };
-          reader.readAsDataURL(file);
+          try {
+            const compressed = await processImageFile(file);
+            handleChange('schoolLogo', compressed);
+          } catch (err) {
+            console.error('Failed to process pasted image:', err);
+          }
         }
         break;
       }
@@ -63,7 +67,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
           </h3>
         </div>
         <span className="text-[11px] text-slate-400 dark:text-zinc-500">
-          Tip: You can paste (Ctrl+V) school logo directly anywhere here
+          Tip: You can paste (Ctrl+V) school logo directly anywhere on the page
         </span>
       </div>
 
@@ -166,7 +170,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center space-x-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/40 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-zinc-200 transition active:scale-95"
+              className="flex items-center space-x-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/40 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-zinc-200 transition active:scale-95 cursor-pointer"
             >
               <Upload className="h-3.5 w-3.5 text-indigo-600 dark:text-pink-400" />
               <span>{config.schoolLogo ? 'Change' : 'Upload Logo'}</span>
@@ -174,7 +178,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
             {config.schoolLogo && (
               <button
                 onClick={() => handleChange('schoolLogo', undefined)}
-                className="p-1.5 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500/20 transition active:scale-95"
+                className="p-1.5 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500/20 transition active:scale-95 cursor-pointer"
                 title="Remove logo"
               >
                 <Trash2 className="h-3.5 w-3.5" />

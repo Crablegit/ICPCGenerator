@@ -47,6 +47,7 @@ export function generateLatex(notebook: NotebookData): string {
 \\usepackage[utf8]{inputenc}
 \\usepackage[english]{babel}
 \\usepackage{listings}
+\\usepackage{graphicx}
 \\usepackage[usenames,dvipsnames]{color}
 \\usepackage{amsmath}
 \\usepackage{amssymb}

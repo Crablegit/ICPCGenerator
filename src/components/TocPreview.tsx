@@ -1,16 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { NotebookData } from '@/types/notebook';
-import { FileText, Sparkles } from 'lucide-react';
+import { FileText, Sparkles, Image as ImageIcon, X, Upload } from 'lucide-react';
+import { processImageFile } from '@/lib/imageHelper';
 
 interface TocPreviewProps {
   notebook: NotebookData;
   onSelectSnippet?: (id: string) => void;
+  onUpdateLogo?: (logoDataUrl?: string) => void;
 }
 
-export const TocPreview: React.FC<TocPreviewProps> = ({ notebook, onSelectSnippet }) => {
+export const TocPreview: React.FC<TocPreviewProps> = ({ 
+  notebook, 
+  onSelectSnippet,
+  onUpdateLogo 
+}) => {
   const { config, sections } = notebook;
+  const logoInputRef = useRef<HTMLInputElement>(null);
+  const [isHoveringLogoArea, setIsHoveringLogoArea] = useState(false);
 
   // Compute estimated page numbers for each item
   let currentPage = 2;
@@ -33,8 +41,45 @@ export const TocPreview: React.FC<TocPreviewProps> = ({ notebook, onSelectSnippe
     });
   });
 
+  const handleLogoFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    try {
+      const dataUrl = await processImageFile(file);
+      onUpdateLogo && onUpdateLogo(dataUrl);
+    } catch (err) {
+      console.error(err);
+    }
+    e.target.value = '';
+  };
+
+  const handleDropLogo = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsHoveringLogoArea(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith('image/')) {
+        try {
+          const dataUrl = await processImageFile(file);
+          onUpdateLogo && onUpdateLogo(dataUrl);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    }
+  };
+
   return (
     <div className="relative group">
+      {/* Hidden Logo Input */}
+      <input
+        ref={logoInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleLogoFile}
+      />
+
       {/* Paper Top Info Bar */}
       <div className="flex items-center justify-between px-3 py-2 mb-2 text-[11px] text-slate-500 dark:text-zinc-400 font-medium">
         <div className="flex items-center space-x-1.5">
@@ -49,16 +94,48 @@ export const TocPreview: React.FC<TocPreviewProps> = ({ notebook, onSelectSnippe
 
       {/* Physical Paper Document Simulation with Neon Rim Glow */}
       <div className="w-full rounded-3xl bg-white text-slate-900 shadow-xl dark:shadow-[0_25px_60px_rgba(0,0,0,0.85)] border border-slate-200 dark:border-zinc-800 hover:border-indigo-400/60 dark:hover:border-pink-500/50 hover:shadow-[0_0_25px_rgba(99,102,241,0.18)] dark:hover:shadow-[0_0_30px_rgba(244,63,94,0.25)] p-6 sm:p-12 font-serif min-h-[550px] transition-all">
-        {/* Title Header with Optional School Logo */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-3 mb-2">
-            {config.schoolLogo && (
-              <img
-                src={config.schoolLogo}
-                alt="School Logo"
-                className="h-8 max-w-[50px] object-contain shrink-0 inline-block"
-              />
+        {/* Title Header with Interactive School Logo */}
+        <div 
+          onDragOver={(e) => { e.preventDefault(); setIsHoveringLogoArea(true); }}
+          onDragLeave={() => setIsHoveringLogoArea(false)}
+          onDrop={handleDropLogo}
+          className={`text-center mb-8 p-3 rounded-2xl transition-all ${
+            isHoveringLogoArea ? 'bg-indigo-50/70 border-2 border-dashed border-indigo-400' : ''
+          }`}
+        >
+          <div className="flex items-center justify-center space-x-3 mb-2 flex-wrap">
+            {config.schoolLogo ? (
+              <div className="relative group inline-flex items-center">
+                <img
+                  src={config.schoolLogo}
+                  alt="School Logo"
+                  onClick={() => logoInputRef.current?.click()}
+                  className="h-9 max-w-[60px] object-contain shrink-0 inline-block cursor-pointer hover:opacity-80 transition hover:scale-105"
+                  title="Click to change logo"
+                />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onUpdateLogo && onUpdateLogo(undefined);
+                  }}
+                  className="absolute -top-1.5 -right-1.5 opacity-0 group-hover:opacity-100 bg-red-500 hover:bg-red-600 text-white rounded-full p-0.5 shadow transition cursor-pointer"
+                  title="Remove logo"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => logoInputRef.current?.click()}
+                className="inline-flex items-center space-x-1 rounded-xl border border-dashed border-slate-300 hover:border-indigo-500 dark:hover:border-pink-500 bg-slate-50 hover:bg-indigo-50/50 px-2.5 py-1 text-xs font-sans text-slate-500 hover:text-indigo-600 dark:hover:text-pink-600 transition cursor-pointer shadow-sm"
+                title="Add University Logo (Click or Paste Ctrl+V)"
+              >
+                <ImageIcon className="h-3.5 w-3.5" />
+                <span>+ Logo</span>
+              </button>
             )}
+
             <h1 className="text-3xl font-bold tracking-tight text-slate-900 font-serif inline-block">
               {config.title || 'Team Notebook'}
             </h1>
