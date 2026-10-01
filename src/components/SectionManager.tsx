@@ -74,7 +74,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
           behavior: 'smooth'
         });
       }
-    }, 100);
+    }, 120);
   };
 
   // Move Section Up/Down
@@ -181,7 +181,10 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
 
     for (const file of files) {
       const ext = '.' + file.name.split('.').pop()?.toLowerCase();
-      const content = await file.text();
+      let content = await file.text();
+      if (!content || content.trim().length === 0) {
+        content = `// Empty source file: ${file.name}\n// Paste your algorithm code here\n`;
+      }
       const nameWithoutExt = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
       let lang = 'cpp';
       if (ext === '.py') lang = 'python';
@@ -302,24 +305,24 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
         onChange={handleSectionFilesSelected}
       />
 
-      {/* Bulk Upload Dropzone with Apple spring feedback */}
+      {/* Bulk Upload Dropzone */}
       <motion.div
-        whileHover={{ scale: 1.01 }}
+        whileHover={{ scale: 1.005 }}
         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
-        className={`rounded-3xl border-2 border-dashed p-4 text-center transition-all ${
+        className={`rounded-2xl border-2 border-dashed p-4 text-center transition-all ${
           isDragging 
-            ? 'border-blue-500 bg-blue-500/10' 
-            : 'border-slate-200 dark:border-white/10 bg-slate-50/70 dark:bg-slate-900/50 hover:border-slate-300 dark:hover:border-white/20'
+            ? 'border-indigo-500 bg-indigo-500/10 dark:border-pink-500 dark:bg-pink-500/10' 
+            : 'border-slate-200 dark:border-zinc-800 bg-slate-50/70 dark:bg-zinc-900/40 hover:border-indigo-400 dark:hover:border-pink-500/40'
         }`}
       >
-        <div className="flex items-center justify-center space-x-2 text-slate-800 dark:text-slate-200 mb-1">
-          <Folder className="h-5 w-5 text-blue-500 dark:text-blue-400" />
+        <div className="flex items-center justify-center space-x-2 text-slate-800 dark:text-zinc-200 mb-1">
+          <Folder className="h-4 w-4 text-indigo-600 dark:text-pink-500" />
           <span className="text-xs font-bold uppercase tracking-wider">Bulk Upload Root Folder</span>
         </div>
-        <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-3 px-2">
+        <p className="text-[11px] text-slate-500 dark:text-zinc-400 mb-3 px-2">
           Each subfolder becomes a category with its code files (.cpp, .py, .java, .tex).
         </p>
 
@@ -327,7 +330,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => folderInputRef.current?.click()}
-            className="flex items-center space-x-1.5 rounded-full bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-md shadow-blue-500/20 hover:bg-blue-500 transition cursor-pointer"
+            className="flex items-center space-x-1.5 rounded-full bg-indigo-600 hover:bg-indigo-500 dark:bg-pink-600 dark:hover:bg-pink-500 px-3.5 py-1.5 text-xs font-semibold text-white shadow-md shadow-indigo-500/20 dark:shadow-pink-500/25 transition cursor-pointer"
           >
             <FolderPlus className="h-3.5 w-3.5" />
             <span>Select Folder</span>
@@ -336,9 +339,9 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => zipInputRef.current?.click()}
-            className="flex items-center space-x-1.5 rounded-full bg-slate-200/80 dark:bg-white/5 border border-slate-300/80 dark:border-white/10 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-white/10 transition cursor-pointer"
+            className="flex items-center space-x-1.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-zinc-300 transition cursor-pointer"
           >
-            <FolderArchive className="h-3.5 w-3.5 text-purple-500 dark:text-purple-400" />
+            <FolderArchive className="h-3.5 w-3.5 text-indigo-500 dark:text-pink-400" />
             <span>Select .ZIP</span>
           </motion.button>
         </div>
@@ -351,7 +354,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="rounded-2xl bg-emerald-500/15 border border-emerald-500/30 px-3.5 py-2 text-xs text-emerald-700 dark:text-emerald-300 flex items-center space-x-2 shadow-sm"
+            className="rounded-xl bg-emerald-500/10 dark:bg-pink-500/15 border border-emerald-500/20 dark:border-pink-500/30 px-3.5 py-2 text-xs text-emerald-700 dark:text-pink-300 flex items-center space-x-2 shadow-sm"
           >
             <Check className="h-4 w-4" />
             <span>{statusMessage}</span>
@@ -362,8 +365,8 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
       {/* Sections Tree List Header */}
       <div className="flex items-center justify-between pt-1">
         <div className="flex items-center space-x-2">
-          <Layers className="h-4 w-4 text-indigo-500 dark:text-indigo-400" />
-          <h3 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+          <Layers className="h-4 w-4 text-indigo-600 dark:text-pink-500" />
+          <h3 className="text-xs font-bold text-slate-700 dark:text-zinc-300 uppercase tracking-wider">
             Categories ({sections.length})
           </h3>
         </div>
@@ -371,7 +374,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={handleAddSection}
-          className="flex items-center space-x-1 rounded-full bg-indigo-50 dark:bg-indigo-600/30 border border-indigo-200 dark:border-indigo-500/40 px-3 py-1 text-xs font-medium text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-600/50 transition cursor-pointer shadow-sm"
+          className="flex items-center space-x-1 rounded-full bg-indigo-50 dark:bg-pink-500/10 border border-indigo-200/80 dark:border-pink-500/30 px-3 py-1 text-xs font-semibold text-indigo-600 dark:text-pink-400 hover:bg-indigo-100 dark:hover:bg-pink-500/20 transition cursor-pointer shadow-sm"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Category</span>
@@ -381,17 +384,17 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
       {/* Category List with Auto-Scroll Ref */}
       <div
         ref={categoryListRef}
-        className="space-y-3 overflow-y-auto max-h-[calc(100vh-25rem)] pr-1 scroll-smooth"
+        className="space-y-3 overflow-y-auto max-h-[calc(100vh-23rem)] pr-1 scroll-smooth"
       >
         {sections.map((section, secIdx) => (
           <div
             key={section.id}
-            className="rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900/60 overflow-hidden shadow-sm transition-all"
+            className="rounded-2xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/80 overflow-hidden shadow-sm transition-all hover:border-slate-300 dark:hover:border-zinc-700"
           >
             {/* Section Header */}
-            <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-950/40 px-3 py-2 border-b border-slate-100 dark:border-white/5">
+            <div className="flex items-center justify-between bg-slate-50/80 dark:bg-zinc-900/60 px-3 py-2 border-b border-slate-100 dark:border-zinc-800/80">
               <div className="flex items-center space-x-2 flex-1 min-w-0">
-                <Folder className="h-4 w-4 text-amber-500 dark:text-amber-400 shrink-0" />
+                <Folder className="h-3.5 w-3.5 text-amber-500 shrink-0" />
                 {editingSectionId === section.id ? (
                   <div className="flex items-center space-x-1 flex-1">
                     <input
@@ -400,11 +403,11 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                       onChange={(e) => setEditingTitle(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSaveRename(section.id)}
                       autoFocus
-                      className="w-full rounded-lg bg-white dark:bg-slate-950 px-2 py-0.5 text-xs text-slate-900 dark:text-white border border-blue-500 focus:outline-none"
+                      className="w-full rounded-md bg-white dark:bg-black px-2 py-0.5 text-xs text-slate-900 dark:text-white border border-indigo-500 dark:border-pink-500 focus:outline-none"
                     />
                     <button
                       onClick={() => handleSaveRename(section.id)}
-                      className="p-1 text-emerald-600 dark:text-emerald-400 hover:opacity-80"
+                      className="p-1 text-emerald-600 dark:text-pink-400 hover:opacity-80"
                     >
                       <Check className="h-3 w-3" />
                     </button>
@@ -412,53 +415,73 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                 ) : (
                   <span
                     onClick={() => handleStartRename(section)}
-                    className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition"
+                    className="text-xs font-semibold text-slate-800 dark:text-zinc-200 truncate cursor-pointer hover:text-indigo-600 dark:hover:text-pink-400 transition"
                     title="Click to rename category"
                   >
                     {section.title}
                   </span>
                 )}
-                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
+                <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-mono">
                   ({section.snippets.length})
                 </span>
               </div>
 
-              {/* Section Controls */}
+              {/* Section Controls Toolbar */}
               <div className="flex items-center space-x-0.5 shrink-0 ml-2">
+                {/* Upload code files to this category */}
+                <button
+                  onClick={() => handleTriggerSectionFileUpload(section.id)}
+                  className="p-1 text-slate-400 hover:text-indigo-600 dark:hover:text-pink-400 transition rounded"
+                  title="Upload code files to this category"
+                >
+                  <Upload className="h-3.5 w-3.5" />
+                </button>
+                {/* Add new code snippet */}
+                <button
+                  onClick={() => handleAddSnippet(section.id)}
+                  className="p-1 text-slate-400 hover:text-indigo-600 dark:hover:text-pink-400 transition rounded"
+                  title="Add code snippet"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                </button>
                 {/* Clear all files in this section */}
                 <button
                   onClick={() => handleClearSectionFiles(section.id, section.title)}
-                  className="p-1 text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 transition"
-                  title="Clear all code files in this category"
+                  className="p-1 text-slate-400 hover:text-amber-500 transition rounded"
+                  title="Clear all files in this category"
                 >
                   <Eraser className="h-3.5 w-3.5" />
                 </button>
+                {/* Move category up */}
                 <button
                   onClick={() => handleMoveSection(secIdx, 'up')}
                   disabled={secIdx === 0}
-                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 disabled:opacity-20"
+                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-zinc-200 disabled:opacity-20 rounded"
                   title="Move category up"
                 >
                   <ChevronUp className="h-3.5 w-3.5" />
                 </button>
+                {/* Move category down */}
                 <button
                   onClick={() => handleMoveSection(secIdx, 'down')}
                   disabled={secIdx === sections.length - 1}
-                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 disabled:opacity-20"
+                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-zinc-200 disabled:opacity-20 rounded"
                   title="Move category down"
                 >
                   <ChevronDown className="h-3.5 w-3.5" />
                 </button>
+                {/* Rename */}
                 <button
                   onClick={() => handleStartRename(section)}
-                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
-                  title="Rename"
+                  className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-zinc-200 rounded"
+                  title="Rename category"
                 >
                   <Edit2 className="h-3 w-3" />
                 </button>
+                {/* Delete category */}
                 <button
                   onClick={() => handleDeleteSection(section.id)}
-                  className="p-1 text-red-400 hover:text-red-500"
+                  className="p-1 text-red-400 hover:text-red-500 rounded"
                   title="Delete category"
                 >
                   <Trash2 className="h-3 w-3" />
@@ -469,8 +492,11 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
             {/* Snippets list */}
             <div className="p-2 space-y-1">
               {section.snippets.length === 0 ? (
-                <div className="text-center py-2 text-[11px] text-slate-400 italic">
-                  Empty category. Upload code below.
+                <div 
+                  onClick={() => handleTriggerSectionFileUpload(section.id)}
+                  className="group flex flex-col items-center justify-center py-3 px-2 rounded-xl border border-dashed border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/40 text-slate-400 dark:text-zinc-500 hover:text-indigo-600 dark:hover:text-pink-400 cursor-pointer transition text-center"
+                >
+                  <span className="text-[11px] font-medium">+ Upload or add code here</span>
                 </div>
               ) : (
                 section.snippets.map((snip, snipIdx) => {
@@ -482,18 +508,18 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                       onClick={() => onSelectSnippet(snip.id)}
                       className={`group flex items-center justify-between rounded-xl px-2.5 py-1.5 text-xs transition cursor-pointer ${
                         isSelected
-                          ? 'bg-blue-50 dark:bg-blue-600/25 text-blue-700 dark:text-blue-200 border border-blue-200 dark:border-blue-500/40 shadow-sm'
-                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 border border-transparent'
+                          ? 'bg-indigo-50 border border-indigo-200 text-indigo-700 shadow-sm dark:bg-pink-500/15 dark:border-pink-500/40 dark:text-pink-300'
+                          : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-900 border border-transparent'
                       }`}
                     >
                       <div className="flex items-center space-x-2 truncate">
                         {snip.isTex || snip.language === 'tex' ? (
-                          <FileText className="h-3.5 w-3.5 text-amber-500 dark:text-amber-400 shrink-0" />
+                          <FileText className="h-3.5 w-3.5 text-amber-500 shrink-0" />
                         ) : (
-                          <FileCode className="h-3.5 w-3.5 text-sky-500 dark:text-sky-400 shrink-0" />
+                          <FileCode className="h-3.5 w-3.5 text-indigo-500 dark:text-pink-400 shrink-0" />
                         )}
                         <span className="truncate">{snip.title}</span>
-                        <span className="rounded-md bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 text-[9px] font-mono text-slate-500 dark:text-slate-400 uppercase">
+                        <span className="rounded-md bg-slate-100 dark:bg-zinc-900 px-1.5 py-0.2 text-[9px] font-mono text-slate-500 dark:text-zinc-400 uppercase">
                           {snip.isTex ? 'TEX' : snip.language}
                         </span>
                       </div>
@@ -506,7 +532,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                             handleMoveSnippet(section.id, snipIdx, 'up');
                           }}
                           disabled={snipIdx === 0}
-                          className="p-0.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 disabled:opacity-20"
+                          className="p-0.5 text-slate-400 hover:text-slate-700 dark:hover:text-zinc-200 disabled:opacity-20"
                           title="Move up"
                         >
                           <ChevronUp className="h-3 w-3" />
@@ -517,7 +543,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                             handleMoveSnippet(section.id, snipIdx, 'down');
                           }}
                           disabled={snipIdx === section.snippets.length - 1}
-                          className="p-0.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 disabled:opacity-20"
+                          className="p-0.5 text-slate-400 hover:text-slate-700 dark:hover:text-zinc-200 disabled:opacity-20"
                           title="Move down"
                         >
                           <ChevronDown className="h-3 w-3" />
@@ -537,26 +563,6 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                   );
                 })
               )}
-
-              {/* Upload to category bar */}
-              <div className="flex items-center gap-1.5 pt-1.5 border-t border-slate-100 dark:border-white/5 mt-1">
-                <button
-                  onClick={() => handleTriggerSectionFileUpload(section.id)}
-                  className="flex-1 flex items-center justify-center space-x-1 rounded-xl bg-slate-100 dark:bg-white/5 px-2 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10 transition cursor-pointer"
-                >
-                  <Upload className="h-3 w-3 text-sky-500 dark:text-sky-400" />
-                  <span>Upload Files</span>
-                </button>
-
-                <button
-                  onClick={() => handleAddSnippet(section.id)}
-                  className="flex items-center justify-center space-x-1 rounded-xl bg-slate-100 dark:bg-white/5 px-2 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10 transition cursor-pointer"
-                  title="Add empty code snippet"
-                >
-                  <Plus className="h-3 w-3 text-indigo-500 dark:text-indigo-400" />
-                  <span>New</span>
-                </button>
-              </div>
             </div>
           </div>
         ))}

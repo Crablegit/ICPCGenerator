@@ -41,6 +41,62 @@ export function naturalSortCompare(a: string, b: string): number {
 }
 
 /**
+ * Intelligently extracts the category/section name from a file path
+ * Handles arbitrary nested folders, e.g.
+ * "content/DP/file.cpp" -> "DP"
+ * "ICPCNotebook-main/content/Geometry/file.cpp" -> "Geometry"
+ * "DP/file.cpp" -> "DP"
+ * "Graph/Tree/lca.cpp" -> "Graph" (with snippet "Tree - lca")
+ */
+function extractCategoryAndTitle(normalizedPath: string, filename: string): { category: string; title: string } {
+  const parts = normalizedPath.split('/').filter(Boolean);
+  
+  // If file is directly in root
+  if (parts.length <= 1) {
+    return { category: 'General', title: cleanTitle(filename) };
+  }
+
+  // Filter out wrapper root folders like 'content', 'src', 'codes', etc. if deeper directories exist
+  const folderParts = parts.slice(0, parts.length - 1);
+  const meaningfulFolders = folderParts.filter((f, idx) => {
+    // If it's the only folder, keep it
+    if (folderParts.length === 1) return true;
+    const lower = f.toLowerCase();
+    // Drop top-level generic wrapper names
+    if (idx === 0 && (lower.includes('icpc') || lower.includes('notebook') || lower.includes('main') || lower.includes('master'))) {
+      return false;
+    }
+    if ((idx <= 1) && (lower === 'content' || lower === 'src' || lower === 'source' || lower === 'code' || lower === 'codes')) {
+      return false;
+    }
+    return true;
+  });
+
+  if (meaningfulFolders.length === 0) {
+    // Fallback to the immediate parent folder
+    const parentFolder = folderParts[folderParts.length - 1] || 'General';
+    return { category: parentFolder, title: cleanTitle(filename) };
+  }
+
+  // The primary category is the top meaningful folder
+  const category = meaningfulFolders[0];
+
+  // If there are subdirectories (e.g. Graph / Trees / lca.cpp), prepend subdirectory to title
+  if (meaningfulFolders.length > 1) {
+    const subFolders = meaningfulFolders.slice(1).join(' - ');
+    return {
+      category,
+      title: `${subFolders} - ${cleanTitle(filename)}`
+    };
+  }
+
+  return {
+    category,
+    title: cleanTitle(filename)
+  };
+}
+
+/**
  * Parses files uploaded via HTML5 webkitdirectory folder picker
  */
 export async function parseFolderFiles(files: FileList | File[]): Promise<Section[]> {
@@ -48,44 +104,40 @@ export async function parseFolderFiles(files: FileList | File[]): Promise<Sectio
 
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
-    const path = file.webkitRelativePath || file.name;
+    const rawPath = file.webkitRelativePath || file.name;
+    const normalizedPath = rawPath.replace(/\\/g, '/');
 
     // Ignore hidden files or system files
-    if (path.split('/').some(part => part.startsWith('.'))) continue;
+    if (normalizedPath.split('/').some(part => part.startsWith('.') || part.startsWith('__MACOSX'))) continue;
 
     const ext = '.' + file.name.split('.').pop()?.toLowerCase();
     if (!VALID_EXTENSIONS.includes(ext)) continue;
 
-    // Determine section name from relative path
-    const parts = path.split('/');
-    let sectionName = 'General';
-
-    if (parts.length >= 3) {
-      // e.g. RootFolder / SectionName / Sub / file.cpp
-      sectionName = parts[1];
-    } else if (parts.length === 2) {
-      // e.g. SectionName / file.cpp
-      sectionName = parts[0];
-    }
+    const { category, title } = extractCategoryAndTitle(normalizedPath, file.name);
 
     try {
-      const content = await file.text();
+      let content = await file.text();
+      // If file is 0 bytes (empty dummy file), provide a helpful comment so it doesn't break
+      if (!content || content.trim().length === 0) {
+        content = `// Empty source file: ${file.name}\n// Paste your algorithm code here\n`;
+      }
+
       const lang = detectLanguage(ext);
       const isTex = ext === '.tex';
 
       const snippet: Snippet = {
         id: `snip-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-        title: cleanTitle(file.name),
+        title: title,
         filename: file.name,
         language: lang,
         content: content,
         isTex: isTex
       };
 
-      if (!sectionMap.has(sectionName)) {
-        sectionMap.set(sectionName, []);
+      if (!sectionMap.has(category)) {
+        sectionMap.set(category, []);
       }
-      sectionMap.get(sectionName)!.push(snippet);
+      sectionMap.get(category)!.push(snippet);
     } catch (err) {
       console.warn(`Failed reading file: ${file.name}`, err);
     }
@@ -95,11 +147,11 @@ export async function parseFolderFiles(files: FileList | File[]): Promise<Sectio
   const sections: Section[] = [];
   const sortedSectionNames = Array.from(sectionMap.keys()).sort(naturalSortCompare);
 
-  sortedSectionNames.forEach((title, idx) => {
+  sortedSectionNames.forEach((categoryTitle, idx) => {
     sections.push({
       id: `sec-${idx + 1}-${Date.now()}`,
-      title: title,
-      snippets: sectionMap.get(title) || []
+      title: categoryTitle,
+      snippets: sectionMap.get(categoryTitle) || []
     });
   });
 
@@ -116,53 +168,54 @@ export async function parseZipArchive(zipFile: File): Promise<Section[]> {
 
   const entries = Object.keys(loaded.files);
 
-  for (const filename of entries) {
-    const entry = loaded.files[filename];
+  for (const rawFilename of entries) {
+    const entry = loaded.files[rawFilename];
     if (entry.dir) continue;
 
-    // Ignore hidden or OS files
-    if (filename.split('/').some(p => p.startsWith('.') || p.startsWith('__MACOSX'))) continue;
+    const normalizedPath = rawFilename.replace(/\\/g, '/');
 
-    const parts = filename.split('/');
+    // Ignore hidden or OS files
+    if (normalizedPath.split('/').some(p => p.startsWith('.') || p.startsWith('__MACOSX'))) continue;
+
+    const parts = normalizedPath.split('/');
     const baseName = parts[parts.length - 1];
     const ext = '.' + baseName.split('.').pop()?.toLowerCase();
 
     if (!VALID_EXTENSIONS.includes(ext)) continue;
 
-    let sectionName = 'General';
-    if (parts.length >= 3) {
-      sectionName = parts[1];
-    } else if (parts.length === 2) {
-      sectionName = parts[0];
+    const { category, title } = extractCategoryAndTitle(normalizedPath, baseName);
+
+    let content = await entry.async('string');
+    if (!content || content.trim().length === 0) {
+      content = `// Empty source file: ${baseName}\n// Paste your algorithm code here\n`;
     }
 
-    const content = await entry.async('string');
     const lang = detectLanguage(ext);
     const isTex = ext === '.tex';
 
     const snippet: Snippet = {
       id: `snip-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-      title: cleanTitle(baseName),
+      title: title,
       filename: baseName,
       language: lang,
       content: content,
       isTex: isTex
     };
 
-    if (!sectionMap.has(sectionName)) {
-      sectionMap.set(sectionName, []);
+    if (!sectionMap.has(category)) {
+      sectionMap.set(category, []);
     }
-    sectionMap.get(sectionName)!.push(snippet);
+    sectionMap.get(category)!.push(snippet);
   }
 
   const sections: Section[] = [];
   const sortedNames = Array.from(sectionMap.keys()).sort(naturalSortCompare);
 
-  sortedNames.forEach((title, idx) => {
+  sortedNames.forEach((categoryTitle, idx) => {
     sections.push({
       id: `sec-${idx + 1}-${Date.now()}`,
-      title: title,
-      snippets: sectionMap.get(title) || []
+      title: categoryTitle,
+      snippets: sectionMap.get(categoryTitle) || []
     });
   });
 

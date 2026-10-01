@@ -14,11 +14,11 @@ import { StarModal } from '@/components/StarModal';
 import { Footer } from '@/components/Footer';
 import { 
   Settings2, 
-  ChevronDown,
-  ChevronUp,
-  Sparkles,
-  RotateCcw,
-  BookOpen
+  ChevronDown, 
+  ChevronUp, 
+  Sparkles, 
+  RotateCcw, 
+  BookOpen 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -146,12 +146,12 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative flex flex-col min-h-screen bg-slate-50 dark:bg-[#07090e] text-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <div className="relative flex flex-col min-h-screen bg-white dark:bg-black text-slate-900 dark:text-zinc-100 transition-colors duration-300">
       {/* Ambient background glow */}
-      <div className="fixed inset-0 pointer-events-none bg-mesh-dark hidden dark:block opacity-70 z-0" />
-      <div className="fixed inset-0 pointer-events-none bg-mesh-light block dark:hidden opacity-50 z-0" />
+      <div className="fixed inset-0 pointer-events-none bg-mesh-dark hidden dark:block opacity-60 z-0" />
+      <div className="fixed inset-0 pointer-events-none bg-mesh-light block dark:hidden opacity-40 z-0" />
 
-      {/* Top Navbar: Brand + Theme Toggle ONLY */}
+      {/* Top Navbar */}
       <div className="relative z-20">
         <Navbar
           theme={theme}
@@ -166,9 +166,9 @@ export default function HomePage() {
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={() => setShowConfig(!showConfig)}
-            className="flex items-center space-x-2 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-white/80 dark:bg-slate-900/70 border border-slate-200/90 dark:border-white/10 rounded-2xl px-4 py-2.5 backdrop-blur-xl transition cursor-pointer shadow-sm"
+            className="flex items-center space-x-2 text-xs font-semibold text-slate-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-pink-400 bg-white dark:bg-zinc-950 border border-slate-200/90 dark:border-zinc-800 rounded-2xl px-4 py-2.5 backdrop-blur-xl transition cursor-pointer shadow-sm hover:shadow"
           >
-            <Settings2 className="h-3.5 w-3.5 text-blue-500 dark:text-blue-400" />
+            <Settings2 className="h-3.5 w-3.5 text-indigo-600 dark:text-pink-500" />
             <span>Customize Team & Logo ({notebook.config.teamName || 'Team Notebook'})</span>
             {showConfig ? <ChevronUp className="h-3.5 w-3.5 ml-1 text-slate-400" /> : <ChevronDown className="h-3.5 w-3.5 ml-1 text-slate-400" />}
           </motion.button>
@@ -194,7 +194,7 @@ export default function HomePage() {
         {/* 2-Column Responsive Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Categories & Bulk Upload (4 cols) */}
-          <div className="lg:col-span-4 bg-white/80 dark:bg-slate-900/50 rounded-3xl border border-slate-200/90 dark:border-white/10 p-5 backdrop-blur-2xl shadow-xl dark:shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition-colors">
+          <div className="lg:col-span-4 bg-white dark:bg-zinc-950/70 rounded-3xl border border-slate-200/90 dark:border-zinc-800 p-5 backdrop-blur-2xl shadow-xl dark:shadow-[0_10px_35px_rgba(0,0,0,0.6)] transition-colors">
             <SectionManager
               sections={notebook.sections}
               selectedSnippetId={selectedSnippet?.id || null}
@@ -208,13 +208,13 @@ export default function HomePage() {
           {/* Right Column: Fixed Table of Contents & Action Toolbar (8 cols) */}
           <div className="lg:col-span-8 flex flex-col space-y-4">
             {/* Action Bar with Reset All and Generate Notebook Buttons */}
-            <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-white/10 pb-3">
+            <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-zinc-800 pb-3">
               <div className="flex items-center space-x-2">
-                <BookOpen className="h-4 w-4 text-blue-500 dark:text-blue-400" />
-                <span className="text-sm font-bold text-slate-800 dark:text-slate-200 tracking-tight">
+                <BookOpen className="h-4 w-4 text-indigo-600 dark:text-pink-500" />
+                <span className="text-sm font-bold text-slate-800 dark:text-zinc-200 tracking-tight">
                   Table of Contents
                 </span>
-                <span className="hidden sm:inline text-xs text-slate-400 dark:text-slate-500 font-normal">
+                <span className="hidden sm:inline text-xs text-slate-400 dark:text-zinc-500 font-normal">
                   • Click algorithm to edit
                 </span>
               </div>
@@ -226,7 +226,7 @@ export default function HomePage() {
                   whileTap={{ scale: 0.96 }}
                   transition={{ type: 'spring', stiffness: 450, damping: 25 }}
                   onClick={handleClearAll}
-                  className="flex items-center space-x-1.5 rounded-full border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-white/5 hover:bg-red-50 dark:hover:bg-red-500/10 hover:border-red-300 dark:hover:border-red-500/30 text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400 px-3.5 py-1.5 text-xs font-semibold transition cursor-pointer shadow-sm"
+                  className="flex items-center space-x-1.5 rounded-full border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900/60 hover:bg-red-50 dark:hover:bg-red-500/10 hover:border-red-300 dark:hover:border-red-500/30 text-slate-600 dark:text-zinc-400 hover:text-red-600 dark:hover:text-red-400 px-3.5 py-1.5 text-xs font-semibold transition cursor-pointer shadow-sm"
                   title="Reset everything and start fresh"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
@@ -238,7 +238,7 @@ export default function HomePage() {
                   whileTap={{ scale: 0.96, y: 1 }}
                   transition={{ type: 'spring', stiffness: 500, damping: 25 }}
                   onClick={handleGenerate}
-                  className="flex items-center space-x-2 rounded-full bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 px-5 py-2 text-xs sm:text-sm font-bold text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 transition cursor-pointer"
+                  className="flex items-center space-x-2 rounded-full bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 dark:from-pink-500 dark:via-rose-500 dark:to-pink-600 px-5 py-2 text-xs sm:text-sm font-bold text-white shadow-lg shadow-indigo-500/25 dark:shadow-pink-500/25 hover:shadow-indigo-500/40 dark:hover:shadow-pink-500/40 transition cursor-pointer"
                 >
                   <Sparkles className="h-4 w-4" />
                   <span>Generate Notebook</span>

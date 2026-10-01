@@ -36,19 +36,19 @@ export const TocPreview: React.FC<TocPreviewProps> = ({ notebook, onSelectSnippe
   return (
     <div className="relative group">
       {/* Paper Top Info Bar */}
-      <div className="flex items-center justify-between px-4 py-2 mb-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+      <div className="flex items-center justify-between px-3 py-2 mb-2 text-[11px] text-slate-500 dark:text-zinc-400 font-medium">
         <div className="flex items-center space-x-1.5">
-          <FileText className="h-3.5 w-3.5 text-blue-500" />
+          <FileText className="h-3.5 w-3.5 text-indigo-600 dark:text-pink-500" />
           <span>A4 Landscape • 3 Columns Preview</span>
         </div>
-        <div className="flex items-center space-x-1 text-emerald-600 dark:text-emerald-400">
+        <div className="flex items-center space-x-1 text-indigo-600 dark:text-pink-400">
           <Sparkles className="h-3 w-3" />
           <span>codes2pdf LaTeX Form</span>
         </div>
       </div>
 
       {/* Physical Paper Document Simulation */}
-      <div className="w-full rounded-3xl bg-white text-slate-900 shadow-xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-slate-200/90 dark:border-white/10 p-6 sm:p-12 font-serif min-h-[550px] transition-all">
+      <div className="w-full rounded-3xl bg-white text-slate-900 shadow-xl dark:shadow-[0_25px_60px_rgba(0,0,0,0.85)] border border-slate-200/90 dark:border-zinc-800 p-6 sm:p-12 font-serif min-h-[550px] transition-all">
         {/* Title Header with Optional School Logo */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center space-x-3 mb-2">
@@ -114,7 +114,7 @@ export const TocPreview: React.FC<TocPreviewProps> = ({ notebook, onSelectSnippe
                       <div
                         key={snip.id}
                         onClick={() => onSelectSnippet && onSelectSnippet(snip.id)}
-                        className="group flex items-baseline justify-between cursor-pointer hover:text-blue-700 transition"
+                        className="group flex items-baseline justify-between cursor-pointer hover:text-indigo-600 transition"
                         title="Click to view/edit code"
                       >
                         <div className="flex items-baseline truncate flex-1 min-w-0 pr-1">
