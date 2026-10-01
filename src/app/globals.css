@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Table of Contents Dot Leaders (ICPC Style) */
+.toc-row {
+  display: flex;
+  align-items: baseline;
+  width: 100%;
+  margin-bottom: 2px;
+  font-family: "Courier New", Courier, monospace, serif;
+}
+.toc-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80%;
+}
+.toc-dots {
+  flex-grow: 1;
+  border-bottom: 1px dotted #94a3b8;
+  margin: 0 4px;
+  position: relative;
+  top: -3px;
+}
+.toc-page {
+  font-weight: 600;
+  text-align: right;
+  min-width: 16px;
+}
+
+/* High Fidelity Print Styles for 100% Free Browser PDF Generation */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 12mm 15mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 8.5pt !important;
+  }
+
+  /* Hide navigation, toolbars, buttons during print */
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-page {
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .print-avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .print-columns-3 {
+    column-count: 3 !important;
+    column-gap: 15px !important;
+    column-rule: 1px solid #bbb !important;
+  }
+
+  .print-columns-2 {
+    column-count: 2 !important;
+    column-gap: 20px !important;
+    column-rule: 1px solid #bbb !important;
+  }
+
+  .print-code {
+    font-family: "Consolas", "Courier New", monospace !important;
+    font-size: 7.5pt !important;
+    line-height: 1.15 !important;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    padding: 3px 0 !important;
+    margin: 4px 0 8px 0 !important;
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+    background: transparent !important;
+    color: #000 !important;
+  }
+}
