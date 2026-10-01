@@ -2,7 +2,7 @@ import { NotebookData } from '@/types/notebook';
 
 export const initialNotebookData: NotebookData = {
   config: {
-    title: 'Team Notebook',
+    title: 'ICPC Notebook',
     teamName: 'Sample Team Name',
     university: 'Sample University Name',
     date: 'December 14, 2018',

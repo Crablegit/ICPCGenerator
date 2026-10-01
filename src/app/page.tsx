@@ -179,7 +179,7 @@ export default function HomePage() {
     if (confirm('Reset everything? This will clear all existing categories and files.')) {
       const resetNotebook: NotebookData = {
         config: {
-          title: 'Team Notebook',
+          title: 'ICPC Notebook',
           teamName: 'Sample Team Name',
           university: 'Sample University Name',
           date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),

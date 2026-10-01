@@ -6,22 +6,22 @@ import { generateLatex } from './latexGenerator';
  * Opens LaTeX code in Overleaf via official API.
  * If a school logo image is present, packages into a data:application/zip;base64,... URI
  * so Overleaf extracts BOTH main.tex AND logo.png automatically without any server or cost.
- * Supports passing either NotebookData or raw LaTeX string.
+ * Project and files are named "ICPC Notebook".
  */
 export async function openInOverleaf(notebookOrLatex: NotebookData | string) {
   if (typeof window === 'undefined') return;
 
   let latexCode: string;
   let logoBase64: string | undefined;
-  let title = 'Team_Notebook';
 
   if (typeof notebookOrLatex === 'string') {
     latexCode = notebookOrLatex;
   } else {
     latexCode = generateLatex(notebookOrLatex);
     logoBase64 = notebookOrLatex.config.schoolLogo;
-    title = (notebookOrLatex.config.title || 'Team_Notebook').replace(/\s+/g, '_');
   }
+
+  const projectName = 'ICPC Notebook';
 
   const form = document.createElement('form');
   form.method = 'POST';
@@ -31,6 +31,7 @@ export async function openInOverleaf(notebookOrLatex: NotebookData | string) {
   if (logoBase64) {
     const zip = new JSZip();
     zip.file('main.tex', latexCode);
+    zip.file('ICPC_Notebook.tex', latexCode);
 
     // Extract base64 image data
     try {
@@ -52,13 +53,19 @@ export async function openInOverleaf(notebookOrLatex: NotebookData | string) {
     const nameInput = document.createElement('input');
     nameInput.type = 'hidden';
     nameInput.name = 'snip_name';
-    nameInput.value = title;
+    nameInput.value = projectName;
     form.appendChild(nameInput);
   } else {
     const textarea = document.createElement('textarea');
     textarea.name = 'snip';
     textarea.value = latexCode;
     form.appendChild(textarea);
+
+    const nameInput = document.createElement('input');
+    nameInput.type = 'hidden';
+    nameInput.name = 'snip_name';
+    nameInput.value = projectName;
+    form.appendChild(nameInput);
   }
 
   document.body.appendChild(form);
@@ -67,7 +74,7 @@ export async function openInOverleaf(notebookOrLatex: NotebookData | string) {
 }
 
 /**
- * Downloads a local ZIP file containing main.tex and logo.png
+ * Downloads a local ZIP file containing ICPC_Notebook.tex and logo.png
  */
 export async function downloadProjectZip(notebook: NotebookData) {
   if (typeof window === 'undefined') return;
@@ -76,6 +83,7 @@ export async function downloadProjectZip(notebook: NotebookData) {
   const { config } = notebook;
   const zip = new JSZip();
 
+  zip.file('ICPC_Notebook.tex', latexCode);
   zip.file('main.tex', latexCode);
 
   if (config.schoolLogo) {
@@ -91,7 +99,7 @@ export async function downloadProjectZip(notebook: NotebookData) {
   const content = await zip.generateAsync({ type: 'blob' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(content);
-  a.download = `${(config.title || 'Team_Notebook').replace(/\s+/g, '_')}.zip`;
+  a.download = 'ICPC_Notebook.zip';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

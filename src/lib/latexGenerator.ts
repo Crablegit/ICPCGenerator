@@ -41,9 +41,9 @@ export function generateLatex(notebook: NotebookData): string {
     ? `${config.teamName} (${config.university})`
     : config.teamName;
 
-  const rawTitle = escapeLatexText(config.title || 'Team Notebook');
+  const rawTitle = escapeLatexText(config.title || 'ICPC Notebook');
   const titleFormatted = config.schoolLogo
-    ? `\\includegraphics[height=1.5cm]{logo.png}\\\\[0.3cm] ${rawTitle}`
+    ? `\\includegraphics[height=2.2cm,keepaspectratio]{logo.png}\\\\[0.4cm]\n${rawTitle}`
     : rawTitle;
 
   let out = `\\documentclass[${fontSize},a4paper,onesided]{article}
