@@ -1,5 +1,12 @@
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: "Crab's ICPC generator",
@@ -17,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="min-h-screen bg-slate-950 text-slate-100 antialiased selection:bg-blue-500/30">
+    <html lang="en" className={`dark ${inter.variable}`}>
+      <body className="min-h-screen bg-slate-50 dark:bg-[#07090e] text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-500/30 font-sans transition-colors duration-300">
         {children}
       </body>
     </html>
