@@ -44,14 +44,42 @@ code, pre, kbd, samp, .font-mono {
 /* Background mesh glow */
 .bg-mesh-dark {
   background-image: 
-    radial-gradient(at 0% 0%, rgba(244, 63, 94, 0.08) 0px, transparent 45%),
-    radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.06) 0px, transparent 45%),
-    radial-gradient(at 50% 100%, rgba(244, 63, 94, 0.05) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(244, 63, 94, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.08) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(244, 63, 94, 0.07) 0px, transparent 50%);
 }
 
 .bg-mesh-light {
   background-image: 
-    radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.05) 0px, transparent 45%),
-    radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.04) 0px, transparent 45%),
-    radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.03) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.06) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.04) 0px, transparent 50%);
+}
+
+/* Neon border styling */
+.neon-border-subtle {
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.08);
+}
+.dark .neon-border-subtle {
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  box-shadow: 0 0 12px rgba(244, 63, 94, 0.12);
+}
+
+.neon-border {
+  border: 1px solid rgba(99, 102, 241, 0.55);
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.35);
+}
+.dark .neon-border {
+  border: 1px solid rgba(244, 63, 94, 0.65);
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.45);
+}
+
+.neon-border-active {
+  border: 1.5px solid #6366f1;
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.45), inset 0 0 6px rgba(99, 102, 241, 0.15);
+}
+.dark .neon-border-active {
+  border: 1.5px solid #f43f5e;
+  box-shadow: 0 0 18px rgba(244, 63, 94, 0.6), inset 0 0 8px rgba(244, 63, 94, 0.25);
 }

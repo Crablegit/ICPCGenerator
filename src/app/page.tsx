@@ -148,8 +148,8 @@ export default function HomePage() {
   return (
     <div className="relative flex flex-col min-h-screen bg-white dark:bg-black text-slate-900 dark:text-zinc-100 transition-colors duration-300">
       {/* Ambient background glow */}
-      <div className="fixed inset-0 pointer-events-none bg-mesh-dark hidden dark:block opacity-60 z-0" />
-      <div className="fixed inset-0 pointer-events-none bg-mesh-light block dark:hidden opacity-40 z-0" />
+      <div className="fixed inset-0 pointer-events-none bg-mesh-dark hidden dark:block opacity-70 z-0" />
+      <div className="fixed inset-0 pointer-events-none bg-mesh-light block dark:hidden opacity-50 z-0" />
 
       {/* Top Navbar */}
       <div className="relative z-20">
@@ -166,7 +166,7 @@ export default function HomePage() {
           <motion.button
             whileTap={{ scale: 0.98 }}
             onClick={() => setShowConfig(!showConfig)}
-            className="flex items-center space-x-2 text-xs font-semibold text-slate-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-pink-400 bg-white dark:bg-zinc-950 border border-slate-200/90 dark:border-zinc-800 rounded-2xl px-4 py-2.5 backdrop-blur-xl transition cursor-pointer shadow-sm hover:shadow"
+            className="flex items-center space-x-2 text-xs font-semibold text-slate-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-pink-400 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/50 hover:shadow-[0_0_12px_rgba(99,102,241,0.3)] dark:hover:shadow-[0_0_14px_rgba(244,63,94,0.4)] rounded-2xl px-4 py-2.5 backdrop-blur-xl transition cursor-pointer shadow-sm"
           >
             <Settings2 className="h-3.5 w-3.5 text-indigo-600 dark:text-pink-500" />
             <span>Customize Team & Logo ({notebook.config.teamName || 'Team Notebook'})</span>
@@ -193,8 +193,8 @@ export default function HomePage() {
 
         {/* 2-Column Responsive Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Categories & Bulk Upload (4 cols) */}
-          <div className="lg:col-span-4 bg-white dark:bg-zinc-950/70 rounded-3xl border border-slate-200/90 dark:border-zinc-800 p-5 backdrop-blur-2xl shadow-xl dark:shadow-[0_10px_35px_rgba(0,0,0,0.6)] transition-colors">
+          {/* Left Column: Categories & Bulk Upload (4 cols) with Neon Border */}
+          <div className="lg:col-span-4 bg-white/95 dark:bg-zinc-950/80 rounded-3xl border border-slate-200 dark:border-zinc-800 hover:border-indigo-400/60 dark:hover:border-pink-500/50 hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] dark:hover:shadow-[0_0_25px_rgba(244,63,94,0.2)] p-5 backdrop-blur-2xl shadow-xl transition-all">
             <SectionManager
               sections={notebook.sections}
               selectedSnippetId={selectedSnippet?.id || null}
@@ -226,7 +226,7 @@ export default function HomePage() {
                   whileTap={{ scale: 0.96 }}
                   transition={{ type: 'spring', stiffness: 450, damping: 25 }}
                   onClick={handleClearAll}
-                  className="flex items-center space-x-1.5 rounded-full border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900/60 hover:bg-red-50 dark:hover:bg-red-500/10 hover:border-red-300 dark:hover:border-red-500/30 text-slate-600 dark:text-zinc-400 hover:text-red-600 dark:hover:text-red-400 px-3.5 py-1.5 text-xs font-semibold transition cursor-pointer shadow-sm"
+                  className="flex items-center space-x-1.5 rounded-full border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900/60 hover:bg-red-50 dark:hover:bg-red-500/10 hover:border-red-400 dark:hover:border-red-500/60 hover:shadow-[0_0_12px_rgba(239,68,68,0.35)] text-slate-600 dark:text-zinc-400 hover:text-red-600 dark:hover:text-red-400 px-3.5 py-1.5 text-xs font-semibold transition cursor-pointer shadow-sm"
                   title="Reset everything and start fresh"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
@@ -238,7 +238,7 @@ export default function HomePage() {
                   whileTap={{ scale: 0.96, y: 1 }}
                   transition={{ type: 'spring', stiffness: 500, damping: 25 }}
                   onClick={handleGenerate}
-                  className="flex items-center space-x-2 rounded-full bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 dark:from-pink-500 dark:via-rose-500 dark:to-pink-600 px-5 py-2 text-xs sm:text-sm font-bold text-white shadow-lg shadow-indigo-500/25 dark:shadow-pink-500/25 hover:shadow-indigo-500/40 dark:hover:shadow-pink-500/40 transition cursor-pointer"
+                  className="flex items-center space-x-2 rounded-full border border-indigo-400 dark:border-pink-400 bg-gradient-to-r from-indigo-600 via-indigo-500 to-blue-600 dark:from-pink-500 dark:via-rose-500 dark:to-pink-600 px-5 py-2 text-xs sm:text-sm font-bold text-white shadow-[0_0_18px_rgba(99,102,241,0.5)] dark:shadow-[0_0_22px_rgba(244,63,94,0.65)] hover:shadow-[0_0_25px_rgba(99,102,241,0.7)] dark:hover:shadow-[0_0_28px_rgba(244,63,94,0.85)] transition cursor-pointer"
                 >
                   <Sparkles className="h-4 w-4" />
                   <span>Generate Notebook</span>

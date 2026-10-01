@@ -47,8 +47,8 @@ export const TocPreview: React.FC<TocPreviewProps> = ({ notebook, onSelectSnippe
         </div>
       </div>
 
-      {/* Physical Paper Document Simulation */}
-      <div className="w-full rounded-3xl bg-white text-slate-900 shadow-xl dark:shadow-[0_25px_60px_rgba(0,0,0,0.85)] border border-slate-200/90 dark:border-zinc-800 p-6 sm:p-12 font-serif min-h-[550px] transition-all">
+      {/* Physical Paper Document Simulation with Neon Rim Glow */}
+      <div className="w-full rounded-3xl bg-white text-slate-900 shadow-xl dark:shadow-[0_25px_60px_rgba(0,0,0,0.85)] border border-slate-200 dark:border-zinc-800 hover:border-indigo-400/60 dark:hover:border-pink-500/50 hover:shadow-[0_0_25px_rgba(99,102,241,0.18)] dark:hover:shadow-[0_0_30px_rgba(244,63,94,0.25)] p-6 sm:p-12 font-serif min-h-[550px] transition-all">
         {/* Title Header with Optional School Logo */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center space-x-3 mb-2">

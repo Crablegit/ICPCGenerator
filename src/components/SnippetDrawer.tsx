@@ -47,7 +47,7 @@ export const SnippetDrawer: React.FC<SnippetDrawerProps> = ({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.94, opacity: 0, y: 10 }}
             transition={{ type: 'spring', damping: 25, stiffness: 400 }}
-            className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-black shadow-2xl dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden z-10 text-slate-900 dark:text-zinc-100"
+            className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl border border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/60 shadow-2xl dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] hover:shadow-[0_0_25px_rgba(99,102,241,0.25)] dark:hover:shadow-[0_0_30px_rgba(244,63,94,0.35)] bg-white dark:bg-black overflow-hidden z-10 text-slate-900 dark:text-zinc-100 transition-all"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950">
@@ -69,7 +69,7 @@ export const SnippetDrawer: React.FC<SnippetDrawerProps> = ({
               <div className="flex items-center space-x-2">
                 <button
                   onClick={handleCopy}
-                  className="flex items-center space-x-1 rounded-xl bg-slate-100 dark:bg-zinc-900 px-2.5 py-1 text-xs font-medium text-slate-700 dark:text-zinc-200 hover:bg-slate-200 dark:hover:bg-zinc-800 transition"
+                  className="flex items-center space-x-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/50 px-2.5 py-1 text-xs font-medium text-slate-700 dark:text-zinc-200 transition"
                 >
                   {copied ? <Check className="h-3 w-3 text-emerald-500" /> : <Copy className="h-3 w-3" />}
                   <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -90,7 +90,7 @@ export const SnippetDrawer: React.FC<SnippetDrawerProps> = ({
                   type="text"
                   value={snippet.filename}
                   onChange={(e) => onUpdateSnippet({ ...snippet, filename: e.target.value })}
-                  className="rounded-lg bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 px-2 py-1 text-xs font-mono text-slate-700 dark:text-zinc-300 w-32 focus:outline-none"
+                  className="rounded-lg bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] px-2 py-1 text-xs font-mono text-slate-700 dark:text-zinc-300 w-32 focus:outline-none transition-all"
                   placeholder="file.cpp"
                 />
 
@@ -100,7 +100,7 @@ export const SnippetDrawer: React.FC<SnippetDrawerProps> = ({
                     const l = e.target.value;
                     onUpdateSnippet({ ...snippet, language: l, isTex: l === 'tex' });
                   }}
-                  className="rounded-lg bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 px-2 py-1 text-xs text-slate-700 dark:text-zinc-300 focus:outline-none"
+                  className="rounded-lg bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] px-2 py-1 text-xs text-slate-700 dark:text-zinc-300 focus:outline-none transition-all"
                 >
                   <option value="cpp">C++</option>
                   <option value="java">Java</option>
@@ -145,7 +145,7 @@ export const SnippetDrawer: React.FC<SnippetDrawerProps> = ({
             <div className="flex items-center justify-end px-5 py-3 border-t border-slate-100 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950">
               <button
                 onClick={onClose}
-                className="rounded-xl bg-indigo-600 hover:bg-indigo-500 dark:bg-pink-600 dark:hover:bg-pink-500 px-4 py-1.5 text-xs font-semibold text-white transition shadow-sm"
+                className="rounded-xl border border-indigo-400 dark:border-pink-400 bg-indigo-600 hover:bg-indigo-500 dark:bg-pink-600 dark:hover:bg-pink-500 px-4 py-1.5 text-xs font-semibold text-white shadow-[0_0_12px_rgba(99,102,241,0.4)] dark:shadow-[0_0_14px_rgba(244,63,94,0.5)] transition"
               >
                 Done
               </button>

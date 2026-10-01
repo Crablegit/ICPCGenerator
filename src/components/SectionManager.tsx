@@ -305,7 +305,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
         onChange={handleSectionFilesSelected}
       />
 
-      {/* Bulk Upload Dropzone */}
+      {/* Bulk Upload Dropzone with Neon Border */}
       <motion.div
         whileHover={{ scale: 1.005 }}
         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
@@ -314,8 +314,8 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
         onDrop={handleDrop}
         className={`rounded-2xl border-2 border-dashed p-4 text-center transition-all ${
           isDragging 
-            ? 'border-indigo-500 bg-indigo-500/10 dark:border-pink-500 dark:bg-pink-500/10' 
-            : 'border-slate-200 dark:border-zinc-800 bg-slate-50/70 dark:bg-zinc-900/40 hover:border-indigo-400 dark:hover:border-pink-500/40'
+            ? 'border-indigo-500 shadow-[0_0_20px_rgba(99,102,241,0.5)] bg-indigo-50/50 dark:border-pink-500 dark:shadow-[0_0_22px_rgba(244,63,94,0.6)] dark:bg-pink-500/10' 
+            : 'border-slate-200 dark:border-zinc-800 bg-slate-50/60 dark:bg-zinc-900/40 hover:border-indigo-500 hover:shadow-[0_0_15px_rgba(99,102,241,0.3)] dark:hover:border-pink-500 dark:hover:shadow-[0_0_16px_rgba(244,63,94,0.4)]'
         }`}
       >
         <div className="flex items-center justify-center space-x-2 text-slate-800 dark:text-zinc-200 mb-1">
@@ -330,7 +330,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => folderInputRef.current?.click()}
-            className="flex items-center space-x-1.5 rounded-full bg-indigo-600 hover:bg-indigo-500 dark:bg-pink-600 dark:hover:bg-pink-500 px-3.5 py-1.5 text-xs font-semibold text-white shadow-md shadow-indigo-500/20 dark:shadow-pink-500/25 transition cursor-pointer"
+            className="flex items-center space-x-1.5 rounded-full border border-indigo-400 dark:border-pink-400 bg-indigo-600 hover:bg-indigo-500 dark:bg-pink-600 dark:hover:bg-pink-500 px-3.5 py-1.5 text-xs font-semibold text-white shadow-[0_0_14px_rgba(99,102,241,0.45)] dark:shadow-[0_0_16px_rgba(244,63,94,0.55)] transition cursor-pointer"
           >
             <FolderPlus className="h-3.5 w-3.5" />
             <span>Select Folder</span>
@@ -339,7 +339,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => zipInputRef.current?.click()}
-            className="flex items-center space-x-1.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-zinc-300 transition cursor-pointer"
+            className="flex items-center space-x-1.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/50 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-zinc-300 transition cursor-pointer"
           >
             <FolderArchive className="h-3.5 w-3.5 text-indigo-500 dark:text-pink-400" />
             <span>Select .ZIP</span>
@@ -354,7 +354,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="rounded-xl bg-emerald-500/10 dark:bg-pink-500/15 border border-emerald-500/20 dark:border-pink-500/30 px-3.5 py-2 text-xs text-emerald-700 dark:text-pink-300 flex items-center space-x-2 shadow-sm"
+            className="rounded-xl bg-emerald-500/10 dark:bg-pink-500/15 border border-emerald-500/30 dark:border-pink-500/40 shadow-[0_0_12px_rgba(244,63,94,0.25)] px-3.5 py-2 text-xs text-emerald-700 dark:text-pink-300 flex items-center space-x-2"
           >
             <Check className="h-4 w-4" />
             <span>{statusMessage}</span>
@@ -374,7 +374,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={handleAddSection}
-          className="flex items-center space-x-1 rounded-full bg-indigo-50 dark:bg-pink-500/10 border border-indigo-200/80 dark:border-pink-500/30 px-3 py-1 text-xs font-semibold text-indigo-600 dark:text-pink-400 hover:bg-indigo-100 dark:hover:bg-pink-500/20 transition cursor-pointer shadow-sm"
+          className="flex items-center space-x-1 rounded-full bg-indigo-50 dark:bg-pink-500/10 border border-indigo-200 dark:border-pink-500/40 hover:border-indigo-500 dark:hover:border-pink-500 hover:shadow-[0_0_12px_rgba(99,102,241,0.35)] dark:hover:shadow-[0_0_14px_rgba(244,63,94,0.5)] px-3 py-1 text-xs font-semibold text-indigo-600 dark:text-pink-400 hover:bg-indigo-100 dark:hover:bg-pink-500/20 transition cursor-pointer"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>Add Category</span>
@@ -389,7 +389,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
         {sections.map((section, secIdx) => (
           <div
             key={section.id}
-            className="rounded-2xl border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/80 overflow-hidden shadow-sm transition-all hover:border-slate-300 dark:hover:border-zinc-700"
+            className="rounded-2xl border border-slate-200 dark:border-zinc-800/90 bg-white dark:bg-zinc-950/80 overflow-hidden shadow-sm transition-all hover:border-indigo-400/80 dark:hover:border-pink-500/60 hover:shadow-[0_0_16px_rgba(99,102,241,0.2)] dark:hover:shadow-[0_0_18px_rgba(244,63,94,0.3)]"
           >
             {/* Section Header */}
             <div className="flex items-center justify-between bg-slate-50/80 dark:bg-zinc-900/60 px-3 py-2 border-b border-slate-100 dark:border-zinc-800/80">
@@ -403,7 +403,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                       onChange={(e) => setEditingTitle(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSaveRename(section.id)}
                       autoFocus
-                      className="w-full rounded-md bg-white dark:bg-black px-2 py-0.5 text-xs text-slate-900 dark:text-white border border-indigo-500 dark:border-pink-500 focus:outline-none"
+                      className="w-full rounded-md bg-white dark:bg-black px-2 py-0.5 text-xs text-slate-900 dark:text-white border border-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.4)] dark:border-pink-500 dark:shadow-[0_0_12px_rgba(244,63,94,0.5)] focus:outline-none"
                     />
                     <button
                       onClick={() => handleSaveRename(section.id)}
@@ -494,7 +494,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
               {section.snippets.length === 0 ? (
                 <div 
                   onClick={() => handleTriggerSectionFileUpload(section.id)}
-                  className="group flex flex-col items-center justify-center py-3 px-2 rounded-xl border border-dashed border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/40 text-slate-400 dark:text-zinc-500 hover:text-indigo-600 dark:hover:text-pink-400 cursor-pointer transition text-center"
+                  className="group flex flex-col items-center justify-center py-3 px-2 rounded-xl border border-dashed border-slate-200 dark:border-zinc-800 hover:border-indigo-500 hover:shadow-[0_0_12px_rgba(99,102,241,0.3)] dark:hover:border-pink-500 dark:hover:shadow-[0_0_14px_rgba(244,63,94,0.4)] text-slate-400 dark:text-zinc-500 hover:text-indigo-600 dark:hover:text-pink-400 cursor-pointer transition text-center"
                 >
                   <span className="text-[11px] font-medium">+ Upload or add code here</span>
                 </div>
@@ -508,7 +508,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
                       onClick={() => onSelectSnippet(snip.id)}
                       className={`group flex items-center justify-between rounded-xl px-2.5 py-1.5 text-xs transition cursor-pointer ${
                         isSelected
-                          ? 'bg-indigo-50 border border-indigo-200 text-indigo-700 shadow-sm dark:bg-pink-500/15 dark:border-pink-500/40 dark:text-pink-300'
+                          ? 'border border-indigo-500 shadow-[0_0_14px_rgba(99,102,241,0.4)] bg-indigo-50/80 text-indigo-700 dark:border-pink-500 dark:shadow-[0_0_16px_rgba(244,63,94,0.55)] dark:bg-pink-500/15 dark:text-pink-300'
                           : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-900 border border-transparent'
                       }`}
                     >
