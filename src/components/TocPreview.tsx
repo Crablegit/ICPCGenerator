@@ -84,7 +84,7 @@ export const TocPreview: React.FC<TocPreviewProps> = ({
       <div className="flex items-center justify-between px-3 py-2 mb-2 text-[11px] text-slate-500 dark:text-zinc-400 font-medium">
         <div className="flex items-center space-x-1.5">
           <FileText className="h-3.5 w-3.5 text-indigo-600 dark:text-pink-500" />
-          <span>A4 Landscape • 3 Columns Preview</span>
+          <span>Preview Content</span>
         </div>
         <div className="flex items-center space-x-1 text-indigo-600 dark:text-pink-400">
           <Sparkles className="h-3 w-3" />
@@ -93,7 +93,7 @@ export const TocPreview: React.FC<TocPreviewProps> = ({
       </div>
 
       {/* Physical Paper Document Simulation with Neon Rim Glow */}
-      <div className="w-full rounded-3xl bg-white text-slate-900 shadow-xl dark:shadow-[0_25px_60px_rgba(0,0,0,0.85)] border border-slate-200 dark:border-zinc-800 hover:border-indigo-400/60 dark:hover:border-pink-500/50 hover:shadow-[0_0_25px_rgba(99,102,241,0.18)] dark:hover:shadow-[0_0_30px_rgba(244,63,94,0.25)] p-6 sm:p-12 font-serif min-h-[550px] transition-all">
+      <div className="w-full rounded-3xl bg-white text-slate-900 border-2 border-indigo-300/90 dark:border-pink-500/60 shadow-[0_0_25px_rgba(99,102,241,0.18)] dark:shadow-[0_0_30px_rgba(244,63,94,0.28)] hover:border-indigo-500 dark:hover:border-pink-400 hover:shadow-[0_0_35px_rgba(99,102,241,0.28)] dark:hover:shadow-[0_0_40px_rgba(244,63,94,0.4)] p-6 sm:p-12 font-serif min-h-[550px] transition-all">
         {/* Title Header with Interactive School Logo */}
         <div 
           onDragOver={(e) => { e.preventDefault(); setIsHoveringLogoArea(true); }}

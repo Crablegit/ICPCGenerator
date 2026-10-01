@@ -47,10 +47,10 @@ export const SnippetDrawer: React.FC<SnippetDrawerProps> = ({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.94, opacity: 0, y: 10 }}
             transition={{ type: 'spring', damping: 25, stiffness: 400 }}
-            className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl border border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/60 shadow-2xl dark:shadow-[0_25px_60px_rgba(0,0,0,0.9)] hover:shadow-[0_0_25px_rgba(99,102,241,0.25)] dark:hover:shadow-[0_0_30px_rgba(244,63,94,0.35)] bg-white dark:bg-black overflow-hidden z-10 text-slate-900 dark:text-zinc-100 transition-all"
+            className="relative w-full max-w-2xl max-h-[85vh] flex flex-col rounded-3xl border-2 border-indigo-300 dark:border-pink-500/70 shadow-[0_0_30px_rgba(99,102,241,0.25)] dark:shadow-[0_0_40px_rgba(244,63,94,0.45)] hover:border-indigo-500 dark:hover:border-pink-400 bg-white dark:bg-black overflow-hidden z-10 text-slate-900 dark:text-zinc-100 transition-all"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-950">
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-indigo-100 dark:border-pink-500/30 bg-slate-50 dark:bg-zinc-950">
               <div className="flex items-center space-x-2.5 flex-1 mr-4">
                 {snippet.isTex ? (
                   <FileText className="h-4 w-4 text-amber-500 shrink-0" />

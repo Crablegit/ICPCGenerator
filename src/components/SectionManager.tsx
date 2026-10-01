@@ -315,7 +315,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
         className={`rounded-2xl border-2 border-dashed p-4 text-center transition-all ${
           isDragging 
             ? 'border-indigo-500 shadow-[0_0_20px_rgba(99,102,241,0.5)] bg-indigo-50/50 dark:border-pink-500 dark:shadow-[0_0_22px_rgba(244,63,94,0.6)] dark:bg-pink-500/10' 
-            : 'border-slate-200 dark:border-zinc-800 bg-slate-50/60 dark:bg-zinc-900/40 hover:border-indigo-500 hover:shadow-[0_0_15px_rgba(99,102,241,0.3)] dark:hover:border-pink-500 dark:hover:shadow-[0_0_16px_rgba(244,63,94,0.4)]'
+            : 'border-indigo-300/80 dark:border-pink-500/40 shadow-[0_0_12px_rgba(99,102,241,0.1)] dark:shadow-[0_0_16px_rgba(244,63,94,0.18)] bg-slate-50/60 dark:bg-zinc-900/40 hover:border-indigo-500 hover:shadow-[0_0_18px_rgba(99,102,241,0.25)] dark:hover:border-pink-400 dark:hover:shadow-[0_0_22px_rgba(244,63,94,0.35)]'
         }`}
       >
         <div className="flex items-center justify-center space-x-2 text-slate-800 dark:text-zinc-200 mb-1">
@@ -389,10 +389,10 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
         {sections.map((section, secIdx) => (
           <div
             key={section.id}
-            className="rounded-2xl border border-slate-200 dark:border-zinc-800/90 bg-white dark:bg-zinc-950/80 overflow-hidden shadow-sm transition-all hover:border-indigo-400/80 dark:hover:border-pink-500/60 hover:shadow-[0_0_16px_rgba(99,102,241,0.2)] dark:hover:shadow-[0_0_18px_rgba(244,63,94,0.3)]"
+            className="rounded-2xl border border-indigo-200/90 dark:border-pink-500/40 bg-white dark:bg-zinc-950/80 overflow-hidden shadow-[0_0_10px_rgba(99,102,241,0.08)] dark:shadow-[0_0_14px_rgba(244,63,94,0.15)] transition-all hover:border-indigo-400 dark:hover:border-pink-400 hover:shadow-[0_0_16px_rgba(99,102,241,0.2)] dark:hover:shadow-[0_0_20px_rgba(244,63,94,0.28)]"
           >
             {/* Section Header */}
-            <div className="flex items-center justify-between bg-slate-50/80 dark:bg-zinc-900/60 px-3 py-2 border-b border-slate-100 dark:border-zinc-800/80">
+            <div className="flex items-center justify-between bg-slate-50/80 dark:bg-zinc-900/60 px-3 py-2 border-b border-indigo-100 dark:border-pink-500/20">
               <div className="flex items-center space-x-2 flex-1 min-w-0">
                 <Folder className="h-3.5 w-3.5 text-amber-500 shrink-0" />
                 {editingSectionId === section.id ? (
@@ -494,7 +494,7 @@ export const SectionManager: React.FC<SectionManagerProps> = ({
               {section.snippets.length === 0 ? (
                 <div 
                   onClick={() => handleTriggerSectionFileUpload(section.id)}
-                  className="group flex flex-col items-center justify-center py-3 px-2 rounded-xl border border-dashed border-slate-200 dark:border-zinc-800 hover:border-indigo-500 hover:shadow-[0_0_12px_rgba(99,102,241,0.3)] dark:hover:border-pink-500 dark:hover:shadow-[0_0_14px_rgba(244,63,94,0.4)] text-slate-400 dark:text-zinc-500 hover:text-indigo-600 dark:hover:text-pink-400 cursor-pointer transition text-center"
+                  className="group flex flex-col items-center justify-center py-3 px-2 rounded-xl border border-dashed border-indigo-200/80 dark:border-pink-500/30 hover:border-indigo-500 hover:shadow-[0_0_12px_rgba(99,102,241,0.3)] dark:hover:border-pink-500 dark:hover:shadow-[0_0_14px_rgba(244,63,94,0.4)] text-slate-400 dark:text-zinc-500 hover:text-indigo-600 dark:hover:text-pink-400 cursor-pointer transition text-center"
                 >
                   <span className="text-[11px] font-medium">+ Upload or add code here</span>
                 </div>

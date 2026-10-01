@@ -11,7 +11,7 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-zinc-800 bg-white/80 dark:bg-black/80 backdrop-blur-2xl transition-colors">
+    <header className="sticky top-0 z-40 w-full border-b border-indigo-200/70 dark:border-pink-500/30 bg-white/80 dark:bg-black/80 backdrop-blur-2xl transition-colors">
       <div className="flex h-16 items-center justify-between px-4 sm:px-8 max-w-7xl mx-auto">
         {/* Brand: Title ONLY (no logo icon, no PRO badge) */}
         <div className="flex items-center">
@@ -27,7 +27,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
             whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 500, damping: 25 }}
             onClick={onToggleTheme}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 dark:border-zinc-800 bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-slate-300 hover:border-indigo-500 hover:shadow-[0_0_12px_rgba(99,102,241,0.5)] dark:hover:border-pink-500 dark:hover:shadow-[0_0_14px_rgba(244,63,94,0.6)] transition shadow-sm cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-indigo-300/80 dark:border-pink-500/50 shadow-[0_0_10px_rgba(99,102,241,0.15)] dark:shadow-[0_0_12px_rgba(244,63,94,0.25)] bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-slate-300 hover:border-indigo-500 hover:shadow-[0_0_14px_rgba(99,102,241,0.5)] dark:hover:border-pink-500 dark:hover:shadow-[0_0_16px_rgba(244,63,94,0.6)] transition cursor-pointer"
             title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             aria-label="Toggle theme"
           >

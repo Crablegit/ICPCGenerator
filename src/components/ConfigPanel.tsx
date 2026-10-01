@@ -57,9 +57,9 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
     <div
       onPaste={handlePaste}
       tabIndex={0}
-      className="rounded-3xl border border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/50 hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] dark:hover:shadow-[0_0_25px_rgba(244,63,94,0.25)] bg-white/95 dark:bg-zinc-950/80 p-5 shadow-xl backdrop-blur-xl transition-all focus:outline-none"
+      className="rounded-3xl border-2 border-indigo-300/80 dark:border-pink-500/50 shadow-[0_0_22px_rgba(99,102,241,0.16)] dark:shadow-[0_0_28px_rgba(244,63,94,0.25)] hover:border-indigo-500 dark:hover:border-pink-400 hover:shadow-[0_0_30px_rgba(99,102,241,0.25)] dark:hover:shadow-[0_0_35px_rgba(244,63,94,0.35)] bg-white/95 dark:bg-zinc-950/90 p-5 backdrop-blur-xl transition-all focus:outline-none"
     >
-      <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-zinc-800/80 text-slate-800 dark:text-zinc-200">
+      <div className="flex items-center justify-between pb-3 mb-4 border-b border-indigo-100 dark:border-pink-500/20 text-slate-800 dark:text-zinc-200">
         <div className="flex items-center space-x-2">
           <Settings className="h-4 w-4 text-indigo-600 dark:text-pink-500" />
           <h3 className="text-xs font-bold tracking-wider uppercase text-slate-700 dark:text-zinc-300">
@@ -79,7 +79,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
             type="text"
             value={config.title}
             onChange={(e) => handleChange('title', e.target.value)}
-            className="w-full rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-black px-3 py-2 text-slate-900 dark:text-zinc-100 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] focus:outline-none transition-all"
+            className="w-full rounded-xl border border-indigo-200/90 dark:border-pink-500/35 hover:border-indigo-400 dark:hover:border-pink-500/60 bg-slate-50 dark:bg-black px-3 py-2 text-slate-900 dark:text-zinc-100 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] focus:outline-none transition-all"
             placeholder="icpc notebook"
           />
         </div>
@@ -91,7 +91,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
             type="text"
             value={config.teamName}
             onChange={(e) => handleChange('teamName', e.target.value)}
-            className="w-full rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-black px-3 py-2 text-slate-900 dark:text-zinc-100 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] focus:outline-none transition-all"
+            className="w-full rounded-xl border border-indigo-200/90 dark:border-pink-500/35 hover:border-indigo-400 dark:hover:border-pink-500/60 bg-slate-50 dark:bg-black px-3 py-2 text-slate-900 dark:text-zinc-100 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] focus:outline-none transition-all"
             placeholder="Sample Team Name"
           />
         </div>
@@ -103,7 +103,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
             type="text"
             value={config.university}
             onChange={(e) => handleChange('university', e.target.value)}
-            className="w-full rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-black px-3 py-2 text-slate-900 dark:text-zinc-100 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] focus:outline-none transition-all"
+            className="w-full rounded-xl border border-indigo-200/90 dark:border-pink-500/35 hover:border-indigo-400 dark:hover:border-pink-500/60 bg-slate-50 dark:bg-black px-3 py-2 text-slate-900 dark:text-zinc-100 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] focus:outline-none transition-all"
             placeholder="Sample University Name"
           />
         </div>
@@ -116,7 +116,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
               type="text"
               value={config.date}
               onChange={(e) => handleChange('date', e.target.value)}
-              className="w-full rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-black px-2.5 py-2 text-slate-900 dark:text-zinc-100 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] focus:outline-none transition-all"
+              className="w-full rounded-xl border border-indigo-200/90 dark:border-pink-500/35 hover:border-indigo-400 dark:hover:border-pink-500/60 bg-slate-50 dark:bg-black px-2.5 py-2 text-slate-900 dark:text-zinc-100 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] focus:outline-none transition-all"
               placeholder="December 14, 2018"
             />
           </div>
@@ -126,14 +126,14 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
               type="text"
               value={config.initials}
               onChange={(e) => handleChange('initials', e.target.value)}
-              className="w-full rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-black px-2.5 py-2 text-slate-900 dark:text-zinc-100 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] focus:outline-none transition-all"
+              className="w-full rounded-xl border border-indigo-200/90 dark:border-pink-500/35 hover:border-indigo-400 dark:hover:border-pink-500/60 bg-slate-50 dark:bg-black px-2.5 py-2 text-slate-900 dark:text-zinc-100 focus:border-indigo-500 focus:shadow-[0_0_10px_rgba(99,102,241,0.35)] dark:focus:border-pink-500 dark:focus:shadow-[0_0_12px_rgba(244,63,94,0.45)] focus:outline-none transition-all"
               placeholder="ST"
             />
           </div>
         </div>
 
         {/* School Logo Upload / Paste */}
-        <div className="sm:col-span-2 lg:col-span-2 rounded-2xl border border-dashed border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/50 hover:shadow-[0_0_14px_rgba(99,102,241,0.2)] dark:hover:shadow-[0_0_16px_rgba(244,63,94,0.3)] bg-slate-50/50 dark:bg-zinc-900/30 p-3 flex items-center justify-between transition-all">
+        <div className="sm:col-span-2 lg:col-span-2 rounded-2xl border-2 border-dashed border-indigo-300/80 dark:border-pink-500/40 hover:border-indigo-500 dark:hover:border-pink-400 shadow-[0_0_12px_rgba(99,102,241,0.08)] dark:shadow-[0_0_16px_rgba(244,63,94,0.18)] hover:shadow-[0_0_16px_rgba(99,102,241,0.2)] dark:hover:shadow-[0_0_20px_rgba(244,63,94,0.3)] bg-slate-50/50 dark:bg-zinc-900/30 p-3 flex items-center justify-between transition-all">
           <input
             ref={fileInputRef}
             type="file"
@@ -143,7 +143,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
           />
           <div className="flex items-center space-x-3">
             {config.schoolLogo ? (
-              <div className="relative group h-10 w-10 rounded-xl bg-white dark:bg-zinc-900 p-1 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-zinc-700">
+              <div className="relative group h-10 w-10 rounded-xl bg-white dark:bg-zinc-900 p-1 flex items-center justify-center overflow-hidden border border-indigo-300 dark:border-pink-500/60 shadow-[0_0_10px_rgba(244,63,94,0.3)]">
                 <img
                   src={config.schoolLogo}
                   alt="School Logo"
@@ -170,7 +170,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
           <div className="flex items-center space-x-2">
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center space-x-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/40 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-zinc-200 transition active:scale-95 cursor-pointer"
+              className="flex items-center space-x-1 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-indigo-200/90 dark:border-pink-500/40 hover:border-indigo-400 dark:hover:border-pink-500/80 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-zinc-200 transition active:scale-95 cursor-pointer shadow-sm"
             >
               <Upload className="h-3.5 w-3.5 text-indigo-600 dark:text-pink-400" />
               <span>{config.schoolLogo ? 'Change' : 'Upload Logo'}</span>
@@ -197,7 +197,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
             <select
               value={config.columns}
               onChange={(e) => handleChange('columns', Number(e.target.value))}
-              className="w-full rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-black px-3 py-2 text-slate-900 dark:text-zinc-100 focus:outline-none"
+              className="w-full rounded-xl border border-indigo-200/90 dark:border-pink-500/35 hover:border-indigo-400 dark:hover:border-pink-500/60 bg-slate-50 dark:bg-black px-3 py-2 text-slate-900 dark:text-zinc-100 focus:outline-none transition-all"
             >
               <option value={3}>3 Columns (Standard ICPC)</option>
               <option value={2}>2 Columns</option>
@@ -212,7 +212,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({ config, onChange }) =>
             <select
               value={config.fontSize}
               onChange={(e) => handleChange('fontSize', e.target.value)}
-              className="w-full rounded-xl border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-black px-3 py-2 text-slate-900 dark:text-zinc-100 focus:outline-none"
+              className="w-full rounded-xl border border-indigo-200/90 dark:border-pink-500/35 hover:border-indigo-400 dark:hover:border-pink-500/60 bg-slate-50 dark:bg-black px-3 py-2 text-slate-900 dark:text-zinc-100 focus:outline-none transition-all"
             >
               <option value="10pt">10pt (Standard)</option>
               <option value="9pt">9pt (Compact)</option>
