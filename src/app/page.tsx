@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { NotebookData, Snippet } from '@/types/notebook';
 import { initialNotebookData } from '@/lib/initialData';
-import { generateLatex } from '@/lib/latexGenerator';
-import { openInOverleaf } from '@/lib/overleaf';
+import { openInOverleaf, downloadProjectZip } from '@/lib/overleaf';
 import { processImageFile } from '@/lib/imageHelper';
 import { Navbar } from '@/components/Navbar';
 import { ConfigPanel } from '@/components/ConfigPanel';
@@ -216,10 +215,15 @@ export default function HomePage() {
   };
 
   // Confirm Overleaf from StarModal
-  const handleConfirmOverleaf = () => {
-    const latex = generateLatex(notebook);
-    openInOverleaf(latex);
+  const handleConfirmOverleaf = async () => {
+    await openInOverleaf(notebook);
     setStarModalOpen(false);
+  };
+
+  // Download project ZIP directly
+  const handleDownloadZip = async () => {
+    await downloadProjectZip(notebook);
+    showToast('Downloaded project ZIP with main.tex and logo.png! 📦');
   };
 
   return (
@@ -363,6 +367,7 @@ export default function HomePage() {
         isOpen={starModalOpen}
         onClose={() => setStarModalOpen(false)}
         onConfirmOverleaf={handleConfirmOverleaf}
+        onDownloadZip={handleDownloadZip}
       />
 
       {/* Footer */}

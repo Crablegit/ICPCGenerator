@@ -2,18 +2,20 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Github, ExternalLink, Sparkles, X } from 'lucide-react';
+import { Star, Github, ExternalLink, Sparkles, X, Download } from 'lucide-react';
 
 interface StarModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirmOverleaf: () => void;
+  onDownloadZip?: () => void;
 }
 
 export const StarModal: React.FC<StarModalProps> = ({
   isOpen,
   onClose,
   onConfirmOverleaf,
+  onDownloadZip,
 }) => {
   return (
     <AnimatePresence>
@@ -110,9 +112,19 @@ export const StarModal: React.FC<StarModalProps> = ({
                   <span>Ok bro 🚀 (Open in Overleaf)</span>
                 </motion.button>
 
+                {onDownloadZip && (
+                  <button
+                    onClick={onDownloadZip}
+                    className="w-full flex items-center justify-center space-x-1.5 rounded-xl border border-slate-200 dark:border-zinc-800 hover:border-indigo-400 dark:hover:border-pink-500/50 bg-slate-50 dark:bg-zinc-900/60 py-2.5 px-4 text-xs font-semibold text-slate-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-pink-400 transition cursor-pointer"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    <span>Download Project (.zip)</span>
+                  </button>
+                )}
+
                 <button
                   onClick={onClose}
-                  className="w-full py-2 text-xs font-medium text-slate-400 hover:text-slate-600 dark:hover:text-zinc-300 transition"
+                  className="w-full py-1.5 text-xs font-medium text-slate-400 hover:text-slate-600 dark:hover:text-zinc-300 transition"
                 >
                   Close
                 </button>

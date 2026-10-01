@@ -41,6 +41,11 @@ export function generateLatex(notebook: NotebookData): string {
     ? `${config.teamName} (${config.university})`
     : config.teamName;
 
+  const rawTitle = escapeLatexText(config.title || 'Team Notebook');
+  const titleFormatted = config.schoolLogo
+    ? `\\raisebox{-0.2\\height}{\\includegraphics[height=1.1cm]{logo.png}}\\quad ${rawTitle}`
+    : rawTitle;
+
   let out = `\\documentclass[${fontSize},a4paper,onesided]{article}
 
 \\usepackage{multicol}
@@ -91,7 +96,7 @@ export function generateLatex(notebook: NotebookData): string {
 
 \\begin{document}
 
-\\title{${escapeLatexText(config.title || 'Team Notebook')}}
+\\title{${titleFormatted}}
 \\author{${escapeLatexText(authorStr || 'Sample Team')}}
 \\date{${escapeLatexText(config.date || '\\today')}}
 \\maketitle
