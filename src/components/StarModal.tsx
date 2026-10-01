@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Github, ExternalLink, Sparkles, X, Check } from 'lucide-react';
+import { Star, Github, ExternalLink, Sparkles, X } from 'lucide-react';
 
 interface StarModalProps {
   isOpen: boolean;
@@ -70,7 +70,7 @@ export const StarModal: React.FC<StarModalProps> = ({
               </h3>
 
               <p className="text-xs text-slate-300 leading-relaxed max-w-xs mb-6">
-                Bạn đã tạo thành công mã nguồn ICPC Notebook! Nếu công cụ này giúp ích cho bạn và team, đừng quên tặng mình 1 star trên GitHub nhé!
+                You have successfully generated your ICPC Notebook! If this tool is helpful for you and your team, please consider dropping a star on GitHub!
               </p>
 
               {/* Author & GitHub Card */}
@@ -86,7 +86,7 @@ export const StarModal: React.FC<StarModalProps> = ({
                 </div>
 
                 <a
-                  href="https://github.com/Crablegit"
+                  href="https://github.com/Crablegit/crabs-icpc-generator"
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center space-x-1 rounded-xl bg-white/10 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white/20 transition active:scale-95"
@@ -107,14 +107,14 @@ export const StarModal: React.FC<StarModalProps> = ({
                   className="w-full flex items-center justify-center space-x-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-3.5 px-4 text-sm font-bold text-white shadow-lg shadow-emerald-500/25 hover:from-emerald-400 hover:to-teal-400 transition-all cursor-pointer"
                 >
                   <Sparkles className="h-4 w-4" />
-                  <span>Ok bro 🚀 (Mở sang Overleaf)</span>
+                  <span>Ok bro 🚀 (Open in Overleaf)</span>
                 </motion.button>
 
                 <button
                   onClick={onClose}
                   className="w-full py-2 text-xs font-medium text-slate-400 hover:text-slate-200 transition"
                 >
-                  Đóng cửa sổ
+                  Close
                 </button>
               </div>
             </div>

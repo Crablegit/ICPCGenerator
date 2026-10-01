@@ -1,61 +1,104 @@
 # 🦀 Crab's ICPC Generator
 
-Ứng dụng web tạo **ACM-ICPC Team Notebook** chuẩn form LaTeX theo mô hình [codes2pdf](https://github.com/Erfaniaa/codes2pdf), kết nối trực tiếp với **Overleaf API** mà không tốn bất kỳ chi phí máy ảo hay cài đặt phức tạp nào!
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Crablegit/crabs-icpc-generator)
+
+A modern, fluid web application designed to auto-generate **ACM-ICPC Team Notebooks (Cheatsheets)** with the authentic 3-column LaTeX format based on [codes2pdf](https://github.com/Erfaniaa/codes2pdf). 
+
+Built with **Next.js 14**, **Tailwind CSS**, and **Framer Motion**, integrating seamlessly with the official **Overleaf API** for zero-cost, zero-setup PDF compilation.
 
 ---
 
-## ✨ Tính năng chính
+## ✨ Features
 
-- 🚀 **1-Click Overleaf API**: Bấm **"Generate Notebook"** -> Hiện hộp thoại *"Give me a star ⭐"* -> Bấm *"Ok bro 🚀"* để mở ngay mã nguồn sang Overleaf và xuất PDF chuẩn TeX Live 100% miễn phí.
-- 🌓 **Chuyển đổi Light Mode & Dark Mode**: Tích hợp nút chuyển đổi giao diện sáng/tối chuẩn phong cách Apple ngay góc phải thanh header, lưu lại tùy chọn theo trình duyệt.
-- 📑 **Mục lục Table of Contents cố định trực quan**:
-  - Toàn bộ khung bên phải là bản xem trước mục lục chuẩn ACM-ICPC (3 cột ngang, khổ A4 Landscape, đường chấm dẫn dot leaders và số trang).
-  - Tích hợp 2 nút thao tác chính ngay trên thanh tiêu đề mục lục: **Reset All** và **Generate Notebook**.
-  - Click vào bất kỳ thuật toán nào để mở cửa sổ chỉnh sửa code nhanh chóng.
-- 📁 **2 cách nạp đề mục & mã nguồn**:
-  - **Tải trọn bộ Folder / ZIP**: Đút toàn bộ các file vào từng folder theo chuyên đề, gom tất cả vào một folder lớn rồi chọn hoặc kéo thả vào web. Hệ thống tự động phân loại cây thư mục thành các Category/Section.
-  - **Tải lên từng đề mục thủ công**: Tạo các mục chính (1 Algorithms, 2 DP Optimizations, 3 Data structures...), nạp từng file code vào mục đó.
-- ⬇️ **Tự động cuộn xuống khi thêm Category**: Khi bấm *"Add Category"*, danh sách sẽ tự động cuộn mượt mà xuống cuối cùng và kích hoạt sẵn chế độ đổi tên để bạn gõ tên mục mới ngay lập tức.
-- 🏫 **Tải ảnh Logo trường (Tùy chọn)**:
-  - Cho phép **Upload** hoặc **Paste (Ctrl + V)** ảnh logo trường học trực tiếp từ clipboard.
-  - Logo được hiển thị nhỏ nhắn, trang nhã nằm ngang hàng với chữ *Team Notebook*.
-- 🧹 **Tính năng Reset & Clear linh hoạt**:
-  - Nút **Eraser** cho từng mục: Xóa toàn bộ file trong mục đó.
-  - Nút **Reset All**: Đặt lại toàn bộ notebook về trạng thái ban đầu chỉ với 1 cú click.
+- 🚀 **1-Click Overleaf API Integration**: Click **"Generate Notebook"** -> *"Give me a star ⭐"* -> *"Ok bro 🚀"* to immediately export your generated LaTeX code to Overleaf. Compile and download high-quality PDFs for free without installing heavy TeX Live packages or paying for virtual machines.
+- 🌓 **Light & Dark Mode**: Apple-inspired fluid theme switcher with smooth spring animations, automatically remembering your preference.
+- 📑 **Authentic ACM-ICPC Table of Contents**:
+  - True 3-column A4 Landscape layout matching official ICPC world finals cheatsheet formats.
+  - Dot leaders (`. . . . . . . .`) and dynamic page numbering.
+  - Click any algorithm directly in the Table of Contents or sidebar to open the fast code editor.
+- 📁 **Flexible Code Ingestion**:
+  - **Bulk Folder / ZIP Upload**: Simply organize your code files into topic folders, place them in a root directory or ZIP file, and drop it in. The app automatically parses folders into categories and files into algorithms.
+  - **Manual Category Management**: Create categories (`1 Algorithms`, `2 DP Optimizations`, etc.), upload single/multiple files (`.cpp`, `.py`, `.java`, `.tex`), reorder them, or create snippets from scratch.
+- ⬇️ **Smart Category Auto-Scroll**: When clicking *"Add Category"*, the sidebar smoothly scrolls to the bottom and activates the rename input so you can type immediately.
+- 🏫 **School / University Logo (Optional)**:
+  - Upload image file or directly paste with **`Ctrl + V`** from your clipboard.
+  - Neatly displayed horizontally inline with the *Team Notebook* title.
+- 🧹 **Reset & Clear Capabilities**:
+  - Dedicated **Eraser button** per category to clear code files inside that category.
+  - **Reset All button** to reset the entire notebook to a clean slate.
+- 🎨 **Apple Fluid-Interface Principles**:
+  - Tactile spring interactions on pointer down.
+  - Translucent glassmorphism surfaces (`backdrop-blur-2xl`).
+  - Google Inter typography for clean readability, paired with monospace code formatting.
 
 ---
 
-## 🚀 Cài đặt & Khởi chạy cục bộ
+## 🛠️ Getting Started Locally
 
 ```bash
-# Di chuyển vào thư mục dự án
-cd icpc-notebook-generator
+# Clone the repository
+git clone https://github.com/Crablegit/crabs-icpc-generator.git
+cd crabs-icpc-generator
 
-# Cài đặt thư viện
+# Install dependencies
 npm install
 
-# Chạy server phát triển
+# Start local development server
 npm run dev
 ```
 
-Truy cập: [http://localhost:3000](http://localhost:3000)
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🌐 Triển khai lên Vercel & Supabase
+## 🌐 Deploy to Vercel
 
-1. **Deploy Vercel**:
-   - Push mã nguồn lên GitHub.
-   - Truy cập [vercel.com](https://vercel.com) > Import repository > Bấm **Deploy**.
-2. **Cấu hình Supabase (Tùy chọn)**:
-   - Thêm biến môi trường `NEXT_PUBLIC_SUPABASE_URL` và `NEXT_PUBLIC_SUPABASE_ANON_KEY` vào file `.env.local` hoặc phần Settings trên Vercel.
+1. Push this repository to your GitHub account (`Crablegit/crabs-icpc-generator`).
+2. Go to [vercel.com/new](https://vercel.com/new).
+3. Import `crabs-icpc-generator` and click **Deploy**.
+4. In ~30 seconds, your application will be live at `https://crabs-icpc-generator.vercel.app`!
+
+*(Optional) Supabase Database:* To enable cross-device cloud persistence and sharing links, set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in your Vercel Environment Variables. Otherwise, the app operates completely offline using browser LocalStorage.
+
+---
+
+## 📂 Recommended Folder Structure for Bulk Upload
+
+You can prepare a folder on your computer with the following hierarchy and drop it into the app:
+
+```text
+My-ICPC-Notebook/
+├── 01 Algorithms/
+│   ├── mo_on_trees.cpp
+│   ├── mo_algorithm.cpp
+│   └── sliding_window.cpp
+├── 02 DP Optimizations/
+│   ├── convex_hull_trick.cpp
+│   └── divide_and_conquer.cpp
+├── 03 Data structures/
+│   ├── STL_Treap.cpp
+│   ├── fenwick.cpp
+│   └── dsu.cpp
+├── 04 Geometry/
+│   └── circle_2points_radius.cpp
+├── 05 Graphs/
+│   ├── scc_kosaraju.cpp
+│   └── tarjan_scc.cpp
+├── 06 Math/
+│   ├── lucas_theorem.tex   <-- .tex files render raw formulas/theorems
+│   └── fft.cpp
+└── 10 Strings/
+    ├── suffix_array.cpp
+    └── z_algorithm.cpp
+```
 
 ---
 
 ## 📜 Credits
 
 - **Created by:** Crabrian
-  - **Github:** [https://github.com/Crablegit](https://github.com/Crablegit)
-  - **Linkedin:** [https://www.linkedin.com/in/brianthecrab/](https://www.linkedin.com/in/brianthecrab/)
+  - **GitHub:** [https://github.com/Crablegit](https://github.com/Crablegit)
+  - **LinkedIn:** [https://www.linkedin.com/in/brianthecrab/](https://www.linkedin.com/in/brianthecrab/)
   - **Discord:** `brianthecrab`
-- **Template Credit:** [https://github.com/Erfaniaa/codes2pdf](https://github.com/Erfaniaa/codes2pdf)
+- **Template Credit:** 
+  - LaTeX template structure based on [Erfaniaa/codes2pdf](https://github.com/Erfaniaa/codes2pdf).
